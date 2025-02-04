@@ -20,10 +20,30 @@ def get_data(base_path='BaselineData', connect_type="filesystem"):
         #data_corpus['business_result'] = data_corpus['businessdetails'].merge(data_corpus['businessidentity'], how='inner')
      
         
-        data_corpus['household'] = pd.read_csv(base_path+'/Form 1/household.csv', dtype=str)
-        data_corpus['household_member'] = pd.read_csv(base_path+'/Form 1/household_member.csv')
-        data_corpus['self_employment_seekers'] = pd.read_csv(base_path+'/Form 1/self_employment_seekers.csv')
-        data_corpus['unregisteredactivities'] = pd.read_csv(base_path+'/Form 1/unregisteredactivities.csv')
+        chunk_size = 100000  # Adjust based on memory
+        chunks = pd.read_csv(base_path+'/Form 1/household.csv', dtype=str, chunksize=chunk_size)
+        data_corpus['household'] = pd.concat(chunks, ignore_index=True)
+        #data_corpus['household'] = pd.read_csv(base_path+'/Form 1/household.csv', dtype=str)
+        print('Loading Houseful: Successful!')
+
+        chunk_size = 100000  # Adjust based on memory
+        chunks = pd.read_csv(base_path+'/Form 1/household_member.csv', dtype=str, chunksize=chunk_size)
+        data_corpus['household_member'] = pd.concat(chunks, ignore_index=True)
+        #data_corpus['household_member'] = pd.read_csv(base_path+'/Form 1/household_member.csv')
+        print('Loading Individual Members: Successful!')
+
+
+        chunk_size = 100000  # Adjust based on memory
+        chunks = pd.read_csv(base_path+'/Form 1/self_employment_seekers.csv', dtype=str, chunksize=chunk_size)
+        data_corpus['self_employment_seekers'] = pd.concat(chunks, ignore_index=True)
+        #data_corpus['self_employment_seekers'] = pd.read_csv(base_path+'/Form 1/self_employment_seekers.csv')
+        print('Loading Self Employment Seekers: Successful!')
+
+        chunk_size = 100000  # Adjust based on memory
+        chunks = pd.read_csv(base_path+'/Form 1/unregisteredactivities.csv', dtype=str, chunksize=chunk_size)
+        data_corpus['unregisteredactivities'] = pd.concat(chunks, ignore_index=True)
+        print('Unregistered Activities: Successful!')
+        #data_corpus['unregisteredactivities'] = pd.read_csv(base_path+'/Form 1/unregisteredactivities.csv')
         
         #data_corpus['peur_result'] = data_corpus['household_member'].merge(data_corpus['unregisteredactivities'], how='inner', left_on='uniqueid', right_on='memberid')
         #data_corpus['peu_result'] = data_corpus['household_member'].merge(data_corpus['self_employment_seekers'], how='inner', left_on='uniqueid', right_on='memberid')
@@ -57,46 +77,48 @@ def get_data(base_path='BaselineData', connect_type="filesystem"):
 
 
         print('Loading Data: Successful!')
+    
     elif connect_type == "google-drive":
-        print('Loading Data from Google Drive!')
-        data_corpus['gid_businessidentity'] = '1Fvrds513yknjDtqizSfk60JB_W1G1yjd'
-        data_corpus['gid_businessdetails'] = '1ilaexFPOYPHXYNdXRppQh2VEVI9qZv4N'
-        data_corpus['gid_manpowerengaged'] = '1rBzz6kNzpBQwvWAj93NXm1h4kaUgXPOd'
+        pass
+        # print('Loading Data from Google Drive!')
+        # data_corpus['gid_businessidentity'] = '1Fvrds513yknjDtqizSfk60JB_W1G1yjd'
+        # data_corpus['gid_businessdetails'] = '1ilaexFPOYPHXYNdXRppQh2VEVI9qZv4N'
+        # data_corpus['gid_manpowerengaged'] = '1rBzz6kNzpBQwvWAj93NXm1h4kaUgXPOd'
 
-        data_corpus['url_businessidentity'] = f"https://drive.google.com/uc?id={data_corpus['gid_businessidentity']}&export=download"
-        data_corpus['url_businessdetails'] = f"https://drive.google.com/uc?id={data_corpus['gid_businessdetails']}&export=download"
-        data_corpus['url_manpowerengaged'] = f"https://drive.google.com/uc?id={data_corpus['gid_manpowerengaged']}&export=download"
+        # data_corpus['url_businessidentity'] = f"https://drive.google.com/uc?id={data_corpus['gid_businessidentity']}&export=download"
+        # data_corpus['url_businessdetails'] = f"https://drive.google.com/uc?id={data_corpus['gid_businessdetails']}&export=download"
+        # data_corpus['url_manpowerengaged'] = f"https://drive.google.com/uc?id={data_corpus['gid_manpowerengaged']}&export=download"
 
-        data_corpus['businessdetails'] = pd.read_csv(data_corpus['url_businessdetails'])
-        data_corpus['businessidentity'] = pd.read_csv(data_corpus['url_businessidentity'])  #https://drive.google.com/file/d/1Fvrds513yknjDtqizSfk60JB_W1G1yjd/view?usp=sharing
-        data_corpus['manpowerengaged'] = pd.read_csv(data_corpus['url_manpowerengaged'])
+        # data_corpus['businessdetails'] = pd.read_csv(data_corpus['url_businessdetails'])
+        # data_corpus['businessidentity'] = pd.read_csv(data_corpus['url_businessidentity'])  #https://drive.google.com/file/d/1Fvrds513yknjDtqizSfk60JB_W1G1yjd/view?usp=sharing
+        # data_corpus['manpowerengaged'] = pd.read_csv(data_corpus['url_manpowerengaged'])
 
-        #household
-        data_corpus['gid_household'] = '1lD5OvSg9rAvPJR-kas_vn-wn1OatDr_L'
-        data_corpus['gid_householdmember'] = '1zA5LjofLFsTsaKJbBKsVhyY8bYs3Pou9'
-        data_corpus['gid_self_employment_seekers'] = '1AB8hDJYZy7wQdRX_AKZdZIgiePtkd0d_'
-        data_corpus['gid_unregisteredactivities'] = '1Art08hVQ78krap0AWt32RKt37P6tymmX'
+        # #household
+        # data_corpus['gid_household'] = '1lD5OvSg9rAvPJR-kas_vn-wn1OatDr_L'
+        # data_corpus['gid_householdmember'] = '1zA5LjofLFsTsaKJbBKsVhyY8bYs3Pou9'
+        # data_corpus['gid_self_employment_seekers'] = '1AB8hDJYZy7wQdRX_AKZdZIgiePtkd0d_'
+        # data_corpus['gid_unregisteredactivities'] = '1Art08hVQ78krap0AWt32RKt37P6tymmX'
 
-        data_corpus['url_household'] = f"https://drive.google.com/uc?id={data_corpus['gid_household']}&export=download"
-        data_corpus['url_householdmember'] = f"https://drive.google.com/uc?id={data_corpus['gid_householdmember']}&export=download"
-        data_corpus['url_self_employment_seekers'] = f"https://drive.google.com/uc?id={data_corpus['gid_self_employment_seekers']}&export=download"
-        data_corpus['url_unregisteredactivities'] = f"https://drive.google.com/uc?id={data_corpus['gid_unregisteredactivities']}&export=download"
+        # data_corpus['url_household'] = f"https://drive.google.com/uc?id={data_corpus['gid_household']}&export=download"
+        # data_corpus['url_householdmember'] = f"https://drive.google.com/uc?id={data_corpus['gid_householdmember']}&export=download"
+        # data_corpus['url_self_employment_seekers'] = f"https://drive.google.com/uc?id={data_corpus['gid_self_employment_seekers']}&export=download"
+        # data_corpus['url_unregisteredactivities'] = f"https://drive.google.com/uc?id={data_corpus['gid_unregisteredactivities']}&export=download"
 
 
 
-        data_corpus['household'] = pd.read_csv(data_corpus['url_household'])
-        data_corpus['household_member'] = pd.read_csv(data_corpus['url_householdmember'])  #https://drive.google.com/file/d/1Fvrds513yknjDtqizSfk60JB_W1G1yjd/view?usp=sharing
-        data_corpus['self_employment_seekers'] = pd.read_csv(data_corpus['url_self_employment_seekers'])
-        data_corpus['unregisteredactivities'] = pd.read_csv(data_corpus['url_unregisteredactivities'])
+        # data_corpus['household'] = pd.read_csv(data_corpus['url_household'])
+        # data_corpus['household_member'] = pd.read_csv(data_corpus['url_householdmember'])  #https://drive.google.com/file/d/1Fvrds513yknjDtqizSfk60JB_W1G1yjd/view?usp=sharing
+        # data_corpus['self_employment_seekers'] = pd.read_csv(data_corpus['url_self_employment_seekers'])
+        # data_corpus['unregisteredactivities'] = pd.read_csv(data_corpus['url_unregisteredactivities'])
        
-        data_corpus['business_result'] = data_corpus['businessdetails'].merge(data_corpus['businessidentity'], how='inner')
-        data_corpus['peur_result'] = data_corpus['household_member'].merge(data_corpus['unregisteredactivities'], how='inner', left_on='uniqueid', right_on='memberid')
-        data_corpus['peu_result'] = data_corpus['household_member'].merge(data_corpus['self_employment_seekers'], how='inner', left_on='uniqueid', right_on='memberid')
-        data_corpus['pee_result'] = data_corpus['household_member'].merge(data_corpus['self_employment_seekers'], how='inner', left_on='uniqueid', right_on='memberid')
-        data_corpus['pee_result'] = data_corpus['pee_result'][data_corpus['pee_result']['pecategory']=='PEE']
-        data_corpus['peu_result'] = data_corpus['peu_result'][data_corpus['peu_result']['pecategory']=='PEU']
-        data_corpus['peur_result'] = data_corpus['peur_result'][data_corpus['peur_result']['pecategory']=='PEUR']
-        print('Loading Data: Successful!')
+        # data_corpus['business_result'] = data_corpus['businessdetails'].merge(data_corpus['businessidentity'], how='inner')
+        # data_corpus['peur_result'] = data_corpus['household_member'].merge(data_corpus['unregisteredactivities'], how='inner', left_on='uniqueid', right_on='memberid')
+        # data_corpus['peu_result'] = data_corpus['household_member'].merge(data_corpus['self_employment_seekers'], how='inner', left_on='uniqueid', right_on='memberid')
+        # data_corpus['pee_result'] = data_corpus['household_member'].merge(data_corpus['self_employment_seekers'], how='inner', left_on='uniqueid', right_on='memberid')
+        # data_corpus['pee_result'] = data_corpus['pee_result'][data_corpus['pee_result']['pecategory']=='PEE']
+        # data_corpus['peu_result'] = data_corpus['peu_result'][data_corpus['peu_result']['pecategory']=='PEU']
+        # data_corpus['peur_result'] = data_corpus['peur_result'][data_corpus['peur_result']['pecategory']=='PEUR']
+        # print('Loading Data: Successful!')
 
         ### BUSINESS IDENTITY = https://drive.google.com/file/d/1Fvrds513yknjDtqizSfk60JB_W1G1yjd/view?usp=sharing
         ### MANPOWERENGAGED = https://drive.google.com/file/d/1rBzz6kNzpBQwvWAj93NXm1h4kaUgXPOd/view?usp=sharing
