@@ -20,26 +20,26 @@ def get_data(base_path='BaselineData', connect_type="filesystem"):
         #data_corpus['business_result'] = data_corpus['businessdetails'].merge(data_corpus['businessidentity'], how='inner')
      
         
-        chunk_size = 100000  # Adjust based on memory
+        chunk_size = 10000  # Adjust based on memory
         chunks = pd.read_csv(base_path+'/Form 1/household.csv', dtype=str, chunksize=chunk_size)
         data_corpus['household'] = pd.concat(chunks, ignore_index=True)
         #data_corpus['household'] = pd.read_csv(base_path+'/Form 1/household.csv', dtype=str)
         print('Loading Houseful: Successful!')
 
-        chunk_size = 100000  # Adjust based on memory
+        chunk_size = 10000  # Adjust based on memory
         chunks = pd.read_csv(base_path+'/Form 1/household_member.csv', dtype=str, chunksize=chunk_size)
         data_corpus['household_member'] = pd.concat(chunks, ignore_index=True)
         #data_corpus['household_member'] = pd.read_csv(base_path+'/Form 1/household_member.csv')
         print('Loading Individual Members: Successful!')
 
 
-        chunk_size = 100000  # Adjust based on memory
+        chunk_size = 10000  # Adjust based on memory
         chunks = pd.read_csv(base_path+'/Form 1/self_employment_seekers.csv', dtype=str, chunksize=chunk_size)
         data_corpus['self_employment_seekers'] = pd.concat(chunks, ignore_index=True)
         #data_corpus['self_employment_seekers'] = pd.read_csv(base_path+'/Form 1/self_employment_seekers.csv')
         print('Loading Self Employment Seekers: Successful!')
 
-        chunk_size = 100000  # Adjust based on memory
+        chunk_size = 10000  # Adjust based on memory
         chunks = pd.read_csv(base_path+'/Form 1/unregisteredactivities.csv', dtype=str, chunksize=chunk_size)
         data_corpus['unregisteredactivities'] = pd.concat(chunks, ignore_index=True)
         print('Unregistered Activities: Successful!')
