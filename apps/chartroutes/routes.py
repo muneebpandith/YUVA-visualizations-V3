@@ -110,7 +110,7 @@ def get_data(base_path='BaselineData', connect_type="filesystem"):
 
 data_corpus = dict()
 
-load_subset = False
+load_subset = True
 if load_subset == True:
     base_path = 'dataset/BaselineDataTest'
 else:

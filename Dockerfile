@@ -6,7 +6,6 @@ ENV FLASK_APP run.py
 ENV DEBUG False
 
 COPY requirements.txt .
-
 # install python dependencies
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt

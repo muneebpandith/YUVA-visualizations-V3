@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: flask-volt
-    plan: starter
+    name: yuva-app
+    plan: premium
     env: python
-    region: frankfurt  # region should be same as your database region.
+    region: india  # region should be same as your database region.
     buildCommand: "./build.sh"
     startCommand: "gunicorn run:app"
     envVars:

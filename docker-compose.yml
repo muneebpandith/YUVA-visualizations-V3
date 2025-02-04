@@ -1,7 +1,7 @@
 version: '3.8'
 services:
-  appseed-app:
-    container_name: appseed_app
+  yuva-app:
+    container_name: yuva_app
     restart: always
     build: .
     networks:
@@ -12,13 +12,13 @@ services:
     restart: always
     image: "nginx:latest"
     ports:
-      - "5085:5085"
+      - "8080:8080"
     volumes:
       - ./nginx:/etc/nginx/conf.d
     networks:
       - web_network
     depends_on: 
-      - appseed-app
+      - yuva-app
 networks:
   db_network:
     driver: bridge
