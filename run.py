@@ -3,7 +3,6 @@ import os
 from flask import Flask, render_template, jsonify
 from flask_migrate import Migrate
 from flask_minify  import Minify
-
 from sys import exit
 
 
@@ -30,8 +29,9 @@ except KeyError:
 app = create_app(app_config)
 Migrate(app, db)
 
-print('Debug:', DEBUG)
+print('*** Debug is :', DEBUG)
 if not DEBUG:
+    print("777")
     Minify(app=app, html=True, js=False, cssless=False)
 
 
@@ -49,4 +49,4 @@ if not DEBUG:
 #Chart.generate_line_chart()
 
 if __name__ == "__main__":
-    app.run("0.0.0.0", port=8080)
+    app.run()
