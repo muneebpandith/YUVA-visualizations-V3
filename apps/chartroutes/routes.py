@@ -18,8 +18,9 @@ def get_data(base_path='BaselineData', connect_type="filesystem"):
         #data_corpus['businessidentity'] = pd.read_csv(base_path+'/Form 2/businessidentity.csv')
         #data_corpus['manpowerengaged'] = pd.read_csv(base_path+'/Form 2/manpowerengaged.csv')
         #data_corpus['business_result'] = data_corpus['businessdetails'].merge(data_corpus['businessidentity'], how='inner')
+     
         
-        data_corpus['household'] = pd.read_csv(base_path+'/Form 1/household.csv', low_memory=False)
+        data_corpus['household'] = pd.read_csv(base_path+'/Form 1/household.csv', dtype=str)
         data_corpus['household_member'] = pd.read_csv(base_path+'/Form 1/household_member.csv')
         data_corpus['self_employment_seekers'] = pd.read_csv(base_path+'/Form 1/self_employment_seekers.csv')
         data_corpus['unregisteredactivities'] = pd.read_csv(base_path+'/Form 1/unregisteredactivities.csv')
