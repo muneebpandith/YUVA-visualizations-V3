@@ -1036,9 +1036,8 @@ def get_options(type_of_data, parameter):
                     #     filtered_data = filtered_data[filtered_data['natureofbusiness']==natureofbusiness]
                     #     #print('After filtering panchayatward type ', panchayatward,',Genders remain', list(filtered_data[parameter].unique()))
 
-
-                    options = list(filtered_data['rawmaterialsource'].unique())
-                    options = sorted(["NA" if isinstance(x, float) and np.isnan(x) else x for x in options])
+                    rawmaterial_options = list(filtered_data['rawmaterialsource'].unique())
+                    options =  classify_raw_material_sources(rawmaterial_options)
                     #print(options)
                 
 
@@ -1212,9 +1211,8 @@ def get_options(type_of_data, parameter):
                     # if not enterprisefinancialstatus == "All":
                     #     filtered_data = filtered_data[filtered_data['statusofenterprise']==enterprisefinancialstatus]
 
-                    options = list(filtered_data[parameter].unique())
-                    options = sorted(["NA" if isinstance(x, float) and np.isnan(x) else x for x in options])
-                    #print(options)
+                    cmr_options = list(filtered_data[parameter].unique())
+                    options = classify_currentMarketReach(cmr_options)
                 
                 elif parameter == 'assistancerequiredyuva':
                     # residentialtype = request.args.get("residentialtype")
@@ -1301,7 +1299,7 @@ def get_options(type_of_data, parameter):
                     # if not enterprisefinancialstatus == "All":
                     #     filtered_data = filtered_data[filtered_data['statusofenterprise']==enterprisefinancialstatus]
                     
-                    options = list(filtered_data['assistanceareyoulooking'].unique())
+                    options = list(filtered_data['interestedinyuvaforupgrading'].unique())
                     options = sorted(["NA" if isinstance(x, float) and np.isnan(x) else x for x in options])
                     #print(options)
                 
@@ -1748,7 +1746,7 @@ def get_options(type_of_data, parameter):
                     
                     
                      
-                    options = list(filtered_data['assistancelookingfor'].unique())
+                    options = list(filtered_data['interestedinyuva'].unique())
                     options = sorted(["NA" if isinstance(x, float) and np.isnan(x) else x for x in options])
                     #print(options)
                 
@@ -2198,7 +2196,7 @@ def get_options(type_of_data, parameter):
                     
                     
                      
-                    options = list(filtered_data['assistancelookingfor'].unique())
+                    options = list(filtered_data['interestedinyuva'].unique())
                     options = sorted(["NA" if isinstance(x, float) and np.isnan(x) else x for x in options])
                     #print(options)
                 
@@ -2472,7 +2470,7 @@ def get_pee_charts_filtered():
         df = df[df['scaleofbusiness']==expectedscaleofbusiness]
 
     if not assistancerequiredyuva == "All":
-        df = df[df['assistancelookingfor']==assistancerequiredyuva]
+        df = df[df['interestedinyuva']==assistancerequiredyuva]
     
         
     filtered_df = df.copy()
@@ -2566,7 +2564,7 @@ def get_peu_charts_filtered():
         df = df[df['scaleofbusiness']==expectedscaleofbusiness]
 
     if not assistancerequiredyuva == "All":
-        df = df[df['assistancelookingfor']==assistancerequiredyuva]
+        df = df[df['interestedinyuva']==assistancerequiredyuva]
     
         
     filtered_df = df.copy()
@@ -2672,7 +2670,7 @@ def get_peur_charts_filtered():
     #     df = df[df['expectedscaleofbusiness']==expectedscaleofbusiness]
                   
     if not assistancerequiredyuva == "All":
-        df = df[df['assistanceareyoulooking']==assistancerequiredyuva]              
+        df = df[df['interestedinyuvaforupgrading']==assistancerequiredyuva]              
         
     filtered_df = df.copy()
 
@@ -2717,5 +2715,53 @@ def classify_age_groups(age_list):
     # Get unique age groups
     return sorted(set(get_age_group(age) for age in age_list))
 
+def classify_raw_material_sources(source_list):
+    # Function to classify raw material sources into predefined categories
+    def get_source_category(source_str):
+        # Convert to string to handle non-string types
+        source_str = str(source_str).strip()
+        
+        # Ignore blanks, nulls, and 'NA'
+        if not source_str or source_str.upper() == 'NA' or source_str.lower() == 'null':
+            return None
+        
+        # Define the predefined categories
+        categories = {
+            'Self-sourced (e.g., in Agriculture )',
+            'Locally(within the same district)',
+            'Regionally(within J&K)',
+            'Nationally(outside J&K)',
+            'Internationally (imported)'
+        }
+        
+        # Return exact match if found, otherwise classify as 'Others'
+        return source_str if source_str in categories else 'Others'
 
-#comment
+    # Get unique valid categories (excluding None values)
+    return sorted(set(filter(None, (get_source_category(source) for source in source_list))))
+
+
+
+def classify_currentMarketReach(source_list):
+    # Function to classify raw material sources into predefined categories
+    def get_source_category(source_str):
+        # Convert to string to handle non-string types
+        source_str = str(source_str).strip()
+        
+        # Ignore blanks, nulls, and 'NA'
+        if not source_str or source_str.upper() == 'NA' or source_str.lower() == 'null':
+            return None
+        
+        # Define the predefined categories
+        categories = {
+        'Local (within district)',
+        'Regional (within J&K)',
+        'National (outside J&K)',
+        'International (export markets)'
+        }
+        
+        # Return exact match if found, otherwise classify as 'Others'
+        return source_str if source_str in categories else 'Others'
+
+    # Get unique valid categories (excluding None values)
+    return sorted(set(filter(None, (get_source_category(source) for source in source_list))))

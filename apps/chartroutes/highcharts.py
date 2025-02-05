@@ -158,8 +158,13 @@ class Chart:
         # Define the desired order of categories
         desired_order = ['1', '2', '3', '4', '5', '6', '7', '8', '8+']
 
-        # Convert categories to strings for consistent reindexing
-        categorized_sizes = df['householdsize'].dropna().loc[lambda x: x != 0].apply(lambda x: str(int(x)) if x <= 8 else '8+')
+        # Convert 'householdsize' to numeric (float or int) and drop missing values
+        categorized_sizes = (
+            pd.to_numeric(df['householdsize'], errors='coerce')  # Convert to numeric, coercing errors to NaN
+            .dropna()  # Drop NaN values
+            .loc[lambda x: x != 0]  # Filter out zeros
+            .apply(lambda x: str(int(x)) if x <= 8 else '8+')  # Categorize sizes
+        )
 
         # Reindex the value counts
         size_counts = categorized_sizes.value_counts().reindex(desired_order, fill_value=0)
@@ -393,8 +398,21 @@ class Chart:
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
         chartH18 = self.generate_bar_chart(data_to_visualize, x_title="Employment Status", y_title="Counts", chart_title="Employment Status Distribution", chart_subtitle="", horizontal=True)
 
-        # Change in Present Work (Pie Chart)
-        response_count = df['changepresentwork'].dropna().value_counts()
+                # Change in Present Work (Pie Chart)
+        # Define the employment statuses of interest
+        employment_statuses_of_interest = [
+            "Working as helper in Household enterprise (unpaid family worker)",
+            "Working as regular salaried/ wage employee in private sector",
+            "Working as casual wage labour"
+        ]
+
+        # Filter the DataFrame based on the employment statuses
+        filtered_df = df[df['employmentstatus'].isin(employment_statuses_of_interest)]
+
+        # Get the response count for 'changepresentwork' in the filtered DataFrame
+        response_count = filtered_df['changepresentwork'].dropna().value_counts()
+
+        # Prepare data for visualization
         xlabels, ydata = response_count.index.tolist(), response_count.values.tolist()
         data_to_visualize = [{'name': x, 'data': y} for (x, y) in zip(xlabels, ydata)]
         chartH19 = self.generate_pie_chart(data_to_visualize, chart_title="Change in Present Work", chart_subtitle="")
@@ -462,7 +480,7 @@ class Chart:
 
 
         data = {
-                'ilp': [chartH13,chartH14, chartH15, chartH16,chartH161,chartH17,chartH18, chartH20, chartH21, chartH22, chartH23, chartH24,chartH25],
+                'ilp': [chartH13,chartH14, chartH15, chartH16,chartH161,chartH17,chartH18,chartH19,chartH20, chartH21, chartH22, chartH23, chartH24,chartH25],
                 'filtered_numbers':filtered_numbers
         }
         return data
@@ -587,7 +605,7 @@ class Chart:
         )
         
         # Chart 18: Distribution of Raw Material Source
-        categories = ['Self-sourced (e.g., in Agriculture )', 'Locally(within the same district)', 'Regionally(within J&K)', 'Nationally(outside J&K)', 'Internationally(imported)', 'Others']
+        categories = ['Self-sourced (e.g., in Agriculture )', 'Locally(within the same district)', 'Regionally(within J&K)', 'Nationally(outside J&K)', 'Internationally (imported)', 'Others']
         rawmaterialsource_category = df['rawmaterialsource'].dropna().apply(
             lambda x: next((cat for cat in categories if cat.lower() in x.lower()), 'Others'))
         xlabels, ydata = rawmaterialsource_category.value_counts().index.tolist(), rawmaterialsource_category.value_counts().values.tolist()
