@@ -322,7 +322,7 @@ class Chart:
         data_to_visualize = sorted(data_to_visualize, key=lambda x: desired_order.index(x[0]) if x[0] in desired_order else len(desired_order))
 
         # Generate the bar chart
-        chartH16 = self.generate_bar_chart(data_to_visualize, x_title="Education Level", y_title="Counts", chart_title="Education Level Distribution", chart_subtitle="")
+        chartH16 = self.generate_bar_chart(data_to_visualize, x_title="Education Level", y_title="Counts", chart_title="Distribution of Education Level", chart_subtitle="")
 
         categories = [
             "Diploma or certificate in medicine", "Diploma or certificate in other subjects", 
@@ -365,7 +365,7 @@ class Chart:
             data_to_visualize,
             x_title="Technical Education Skills",
             y_title="Count",
-            chart_title="Technical Education Skill Distribution",
+            chart_title="Distribution of Technical Education Skill",
             chart_subtitle=""
         )
 
@@ -386,7 +386,7 @@ class Chart:
         # Generate the pie chart
         chartH161 = self.generate_pie_chart(
             data_to_visualize,
-            chart_title="Technical Education Skill Distribution",
+            chart_title="Proportion of Individuals havinng Technical Education Skill",
             chart_subtitle=""
         )
 
@@ -396,7 +396,7 @@ class Chart:
         response_count = df['employmentstatus'].dropna().value_counts()
         xlabels, ydata = response_count.index.tolist(), response_count.values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartH18 = self.generate_bar_chart(data_to_visualize, x_title="Employment Status", y_title="Counts", chart_title="Employment Status Distribution", chart_subtitle="", horizontal=True)
+        chartH18 = self.generate_bar_chart(data_to_visualize, x_title="Employment Status", y_title="Counts", chart_title="Distribution of Employment Status", chart_subtitle="", horizontal=True)
 
                 # Change in Present Work (Pie Chart)
         # Define the employment statuses of interest
@@ -422,26 +422,26 @@ class Chart:
         xlabels = list(filtered_data.value_counts().index)  # Unique annual income categories
         ydata = filtered_data.value_counts().values.tolist()  # Count of each category
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartH20 = self.generate_bar_chart(data_to_visualize, x_title="Annual Income", y_title="Counts", chart_title="Annual Income Distribution", chart_subtitle="")
+        chartH20 = self.generate_bar_chart(data_to_visualize, x_title="Annual Income", y_title="Counts", chart_title="Distribution of Annual Income of Individuals", chart_subtitle="")
 
         # Pursuing Higher Education Distribution (Pie Chart)
         filtered_data = df['pursuinghighereducation'].dropna()
         xlabels = list(filtered_data.value_counts().index)  # Unique values (e.g., "Yes", "No")
         ydata = filtered_data.value_counts().values.tolist()  # Count of each value
         data_to_visualize = [{'name': x, 'data': y} for (x, y) in zip(xlabels, ydata)]
-        chartH21 = self.generate_pie_chart(data_to_visualize, chart_title="Pursuing Higher Education Distribution", chart_subtitle="")
+        chartH21 = self.generate_pie_chart(data_to_visualize, chart_title="Proportion of Individuals Pursuing Higher Education ", chart_subtitle="")
 
         # Proportion of Target Group Members (Bar Chart)
         response_count = df['pecategory'].value_counts()
         xlabels, ydata = response_count.index.tolist(), response_count.values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartH22 = self.generate_bar_chart(data_to_visualize, x_title="PECategory", y_title="Counts", chart_title="Proportion of Target Group Members (PEE, PEU, PEUR)", chart_subtitle="")
+        chartH22 = self.generate_bar_chart(data_to_visualize, x_title="PECategory", y_title="Counts", chart_title="Distribution of Target Group Members (PEE, PEU, PEUR)", chart_subtitle="")
 
         # Gender Distribution for PEE, PEU, PEUR (Pie Chart)
         gender_count = df[df['pecategory'].isin(['PEE', 'PEU', 'PEUR']) & df['gender'].notnull()]['gender'].value_counts()
         xlabels, ydata = gender_count.index.tolist(), gender_count.values.tolist()
         data_to_visualize = [{'name': x, 'data': y} for (x, y) in zip(xlabels, ydata)]
-        chartH23 = self.generate_pie_chart(data_to_visualize, chart_title="Gender Distribution for PEE, PEU, PEUR", chart_subtitle="")
+        chartH23 = self.generate_pie_chart(data_to_visualize, chart_title="Gender Distribution for Potential Entrepreneurs", chart_subtitle="")
 
         # Education Level Distribution for PEE, PEU, PEUR (Bar Chart)
         education_count = df[df['pecategory'].isin(['PEE', 'PEU', 'PEUR']) & df['educationlevel'].notnull()]['educationlevel'].value_counts()
@@ -469,13 +469,13 @@ class Chart:
         data_to_visualize = sorted(data_to_visualize, key=lambda x: desired_order.index(x[0]) if x[0] in desired_order else len(desired_order))
 
         # Generate the bar chart
-        chartH24 = self.generate_bar_chart(data_to_visualize, x_title="Education Level", y_title="Counts", chart_title="Education Level Distribution for PEE, PEU, PEUR", chart_subtitle="")
+        chartH24 = self.generate_bar_chart(data_to_visualize, x_title="Education Level", y_title="Counts", chart_title="Education Level Distribution for Potential Entrepreneurs", chart_subtitle="")
 
         # Employment Status Distribution for PEE, PEU, PEUR (Bar Chart)
         filtered_data = df[df['pecategory'].isin(['PEE', 'PEU', 'PEUR'])]
         xlabels, ydata = filtered_data['employmentstatus'].value_counts().index.tolist(), filtered_data['employmentstatus'].value_counts().values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartH25 = self.generate_bar_chart(data_to_visualize, x_title="Employment Status", y_title="Counts", chart_title="Employment Status Distribution for PEE, PEU, PEUR", chart_subtitle="")
+        chartH25 = self.generate_bar_chart(data_to_visualize, x_title="Employment Status", y_title="Counts", chart_title="Employment Status Distribution for Potential Entrepreneurs", chart_subtitle="")
         
 
 
@@ -490,7 +490,7 @@ class Chart:
         data = df['sectorofenterprise'].dropna().value_counts()
         xlabels, ydata = data.index.tolist(), data.values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartpeur1 = self.generate_bar_chart(data_to_visualize, x_title="Sector", y_title="Count", chart_title="Distribution of Sector of Unregistered Activity", chart_subtitle="")
+        chartpeur1 = self.generate_bar_chart(data_to_visualize, x_title="Sector", y_title="Count", chart_title="Distribution of Sectors Among Unregistered Enterprises", chart_subtitle="")
         
         # Chart 2: Distribution of Types of Ownership (Unregistered Activities)
         specific_categories = [
@@ -501,40 +501,40 @@ class Chart:
         xvalues = df['typeofownership'].apply(lambda x: x if x in specific_categories else "Others").value_counts().index.tolist()
         ydata = df['typeofownership'].apply(lambda x: x if x in specific_categories else "Others").value_counts().values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xvalues, ydata)]
-        chartpeur2 = self.generate_bar_chart(data_to_visualize, x_title="Ownership Type", y_title="Count", chart_title="Distribution of Types of Ownership (Unregistered Activities)", chart_subtitle="")
+        chartpeur2 = self.generate_bar_chart(data_to_visualize, x_title="Ownership Type", y_title="Count", chart_title="Distribution of Types of Ownership in Unregistered Enterprises", chart_subtitle="")
 
         # Chart 3: PEUR- Nature of Business
         data = df['natureofbusiness'].value_counts()
         xlabels, ydata = data.index.tolist(), data.values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartpeur3 = self.generate_bar_chart(data_to_visualize, x_title="Nature of Business", y_title="Count", chart_title="PEUR- Nature of Business", chart_subtitle="")
+        chartpeur3 = self.generate_bar_chart(data_to_visualize, x_title="Nature of Business", y_title="Count", chart_title="Distribution of Nature of Business in Unregistered Enterprises", chart_subtitle="")
 
         # Chart 13: PEUR-Location of Business
         filtered_data = df['locationofbusiness'].dropna().loc[lambda x: x != '---']
         xlabels, ydata = filtered_data.value_counts().index.tolist(), filtered_data.value_counts().values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartpeur4 = self.generate_bar_chart(data_to_visualize, x_title="Location", y_title="Count", chart_title="PEUR-Location of Business", chart_subtitle="")
+        chartpeur4 = self.generate_bar_chart(data_to_visualize, x_title="Location", y_title="Count", chart_title="Distribution of Unregistered Business Locations", chart_subtitle="")
 
         
         # Chart 14: PEUR- Area of business unit (Location of business = Outside the home)
         data = df['areaofbusinessunit'].value_counts()
         xlabels, ydata = data.index.tolist(), data.values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartpeur5 = self.generate_bar_chart(data_to_visualize, x_title="Area", y_title="Count", chart_title="PEUR- Area of business unit (Location of business = Outside the home)", chart_subtitle="")
+        chartpeur5 = self.generate_bar_chart(data_to_visualize, x_title="Area", y_title="Count", chart_title="Distribution of Unregistered Business Units by Area", chart_subtitle="")
 
         # Chart 4: Initial Investment Distribution
         filtered_data = df['initialinvestment'].dropna()
         xlabels = list(filtered_data.value_counts().index)
         ydata = filtered_data.value_counts().values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartpeur6 = self.generate_bar_chart(data_to_visualize, x_title="Initial Investment", y_title="Count", chart_title="Initial Investment Distribution", chart_subtitle="")
+        chartpeur6 = self.generate_bar_chart(data_to_visualize, x_title="Initial Investment", y_title="Count", chart_title="Distribution of Initial Investment by Unregistered Businesses", chart_subtitle="")
 
         
         # Chart 15: PEUR-Loan Availed
         filtered_data = df['loanavailed'].dropna().loc[lambda x: x != '---']
         xlabels, ydata = filtered_data.value_counts().index.tolist(), filtered_data.value_counts().values.tolist()
         data_to_visualize = [{'name': x, 'data': y} for (x, y) in zip(xlabels, ydata)]
-        chartpeur7 = self.generate_pie_chart(data_to_visualize, chart_title="PEUR-Loan Availed", chart_subtitle="")
+        chartpeur7 = self.generate_pie_chart(data_to_visualize, chart_title="Proportion of Unregistered Businesses with Loan Availed", chart_subtitle="")
         
         # Chart 16: Loan Amount Availed Distribution
         loan_amount = df['amountofloanavailed'].dropna().value_counts()
@@ -557,7 +557,7 @@ class Chart:
         data_to_visualize = sorted(data_to_visualize, key=lambda x: desired_order.index(x[0]) if x[0] in desired_order else len(desired_order))
 
         # Generate the bar chart
-        chartpeur8 = self.generate_bar_chart(data_to_visualize, x_title="Loan Amount", y_title="Count", chart_title="Loan Amount Availed Distribution", chart_subtitle="")
+        chartpeur8 = self.generate_bar_chart(data_to_visualize, x_title="Loan Amount", y_title="Count", chart_title="Distribution of Loan Amounts Availed", chart_subtitle="")
 
     # Chart 17: Difficulties in Availing Loans
         categories = [
@@ -600,7 +600,7 @@ class Chart:
             data_to_visualize,
             x_title="Difficulty",
             y_title="Count",
-            chart_title="Difficulties in Availing Loans",
+            chart_title="Distribution of Difficulties in Availing Loans",
             chart_subtitle=""
         )
         
@@ -629,14 +629,14 @@ class Chart:
         )
         xlabels, ydata = response_count.index.tolist(), response_count.values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartpeur11 = self.generate_bar_chart(data_to_visualize, x_title="Challenge", y_title="Count", chart_title="Challenges in Sourcing Raw Materials", chart_subtitle="")
+        chartpeur11 = self.generate_bar_chart(data_to_visualize, x_title="Challenge", y_title="Count", chart_title="Distribution of Different Challenges in Raw Material Sourcing", chart_subtitle="")
 
         # Chart 24: Skill Relevant to Business
         data = df['skillrelevanttobusiness'].dropna()
         response_count = data.value_counts()
         xlabels, ydata = response_count.index.tolist(), response_count.values.tolist()
         data_to_visualize = [{'name': x, 'data': y} for (x, y) in zip(xlabels, ydata)]
-        chartpeur12 = self.generate_pie_chart(data_to_visualize, chart_title="Skill Relevant to Business", chart_subtitle="")
+        chartpeur12 = self.generate_pie_chart(data_to_visualize, chart_title="Distribution of Skills Relevant to Business", chart_subtitle="")
 
         # Prepare data for the pie chart
         data = df['statusofenterprise'].dropna().value_counts()
@@ -646,7 +646,7 @@ class Chart:
         # Generate the pie chart
         chartpeur13 = self.generate_pie_chart(
             data_to_visualize,
-            chart_title="PEUR-Status of Enterprise",
+            chart_title="Distribution of Financial Status of Businesses",
             chart_subtitle=""
         )
 
@@ -683,7 +683,7 @@ class Chart:
             data_to_visualize,
             x_title="Market Reach",
             y_title="Count",
-            chart_title="Current Market Reach Distribution",
+            chart_title="Distribution of Current Market Reach",
             chart_subtitle=""
         )
 
@@ -709,14 +709,14 @@ class Chart:
         data_to_visualize = sorted(data_to_visualize, key=lambda x: desired_order.index(x[0]) if x[0] in desired_order else len(desired_order))
 
         # Generate the bar chart
-        chartpeur15 = self.generate_bar_chart(data_to_visualize, x_title="Average Time", y_title="Count", chart_title="Average Time for Sales Distribution", chart_subtitle="")
+        chartpeur15 = self.generate_bar_chart(data_to_visualize, x_title="Average Time", y_title="Count", chart_title="Distribution of Average Time for Sales", chart_subtitle="")
 
         # Chart 22: Lean Period in Sales Distribution
         data = df['leanperiodinsales'].dropna()
         response_count = data.value_counts()
         xlabels, ydata = response_count.index.tolist(), response_count.values.tolist()
         data_to_visualize = [{'name': x, 'data': y} for (x, y) in zip(xlabels, ydata)]
-        chartpeur16 = self.generate_pie_chart(data_to_visualize, chart_title="Lean Period in Sales Distribution", chart_subtitle="")
+        chartpeur16 = self.generate_pie_chart(data_to_visualize, chart_title="Proportion of Businesses with Lean Period in Sales", chart_subtitle="")
 
         # Chart 23: Lean Period Duration Distribution
         lean_period = df['leanperiodduration'].dropna().value_counts()
@@ -739,14 +739,14 @@ class Chart:
         data_to_visualize = sorted(data_to_visualize, key=lambda x: desired_order.index(x[0]) if x[0] in desired_order else len(desired_order))
 
         # Generate the bar chart
-        chartpeur17 = self.generate_bar_chart(data_to_visualize, x_title="Duration", y_title="Count", chart_title="Lean Period Duration Distribution", chart_subtitle="")
+        chartpeur17 = self.generate_bar_chart(data_to_visualize, x_title="Duration", y_title="Count", chart_title="Distribution of Lean Period Durations", chart_subtitle="")
 
         
         # Chart 10: PEUR-Interested in Formal Setup
         filtered_data = df['interestedinformalsetup'].dropna().loc[lambda x: x != '---']
         xlabels, ydata = filtered_data.value_counts().index.tolist(), filtered_data.value_counts().values.tolist()
         data_to_visualize = [{'name': x, 'data': y} for (x, y) in zip(xlabels, ydata)]
-        chartpeur18 = self.generate_pie_chart(data_to_visualize, chart_title="PEUR-Interested in Formal Setup", chart_subtitle="")
+        chartpeur18 = self.generate_pie_chart(data_to_visualize, chart_title="Proportion of Businesses Interested in Informal Setup", chart_subtitle="")
 
         # Chart 11: Reasons for Not Shifting to Formal Sector
         data = df['reasonsfornotshifting'].dropna()
@@ -773,7 +773,7 @@ class Chart:
             data_to_visualize,
             x_title="Reason",
             y_title="Count",
-            chart_title="Reasons for Not Shifting to Formal Sector",
+            chart_title="Distribution of Reasons for Not Shifting to Formal Sector",
             chart_subtitle=""
         )
 
@@ -781,13 +781,13 @@ class Chart:
         filtered_data = df['awareofselfemploymentschemes'].dropna().loc[lambda x: x != '---']
         xlabels, ydata = filtered_data.value_counts().index.tolist(), filtered_data.value_counts().values.tolist()
         data_to_visualize = [{'name': x, 'data': y} for (x, y) in zip(xlabels, ydata)]
-        chartpeur20 = self.generate_pie_chart(data_to_visualize, chart_title="PEUR-Awareness of Self-Employment Schemes", chart_subtitle="")
+        chartpeur20 = self.generate_pie_chart(data_to_visualize, chart_title="Awareness of Self-Employment Schemes Among PEUR", chart_subtitle="")
 
         # Chart 6: PEUR-Usage of Government Schemes
         filtered_data = df['haveyouusedgovtschemes'].dropna().loc[lambda x: x != '---']
         xlabels, ydata = filtered_data.value_counts().index.tolist(), filtered_data.value_counts().values.tolist()
         data_to_visualize = [{'name': x, 'data': y} for (x, y) in zip(xlabels, ydata)]
-        chartpeur21 = self.generate_pie_chart(data_to_visualize, chart_title="PEUR-Usage of Government Schemes", chart_subtitle="")
+        chartpeur21 = self.generate_pie_chart(data_to_visualize, chart_title="Proportion of Businesses That Have Used Government Schemes", chart_subtitle="")
 
         # Chart 7: PEUR - Name of Used Schemes
         categories = [
@@ -836,7 +836,7 @@ class Chart:
         sorted_data = data_series.value_counts(ascending=False)
         xlabels, ydata = sorted_data.index.tolist(), sorted_data.values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartpeur22 = self.generate_bar_chart(data_to_visualize, x_title="Scheme", y_title="Count", chart_title="PEUR - Name of Used Schemes", chart_subtitle="")
+        chartpeur22 = self.generate_bar_chart(data_to_visualize, x_title="Scheme", y_title="Count", chart_title="Distribution of Used Government Schemes", chart_subtitle="")
 
         # Prepare data for the bar chart
         filtered_data = df['loanrepaymentstatus'].dropna()  # Filter non-null values
@@ -848,7 +848,7 @@ class Chart:
             data_to_visualize,
             x_title="Loan Repayment Status",
             y_title="Count",
-            chart_title="PEUR-Loan Repayment Status",
+            chart_title="Distribution of Loan Repayment Status",
             chart_subtitle=""
         )
 
@@ -858,14 +858,14 @@ class Chart:
         filtered_data = df['reasonsfornotavailingscheme'].dropna().loc[lambda x: x != '---']
         xlabels, ydata = filtered_data.value_counts().index.tolist(), filtered_data.value_counts().values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartpeur24 = self.generate_bar_chart(data_to_visualize, x_title="Reason", y_title="Count", chart_title="PEUR-Reasons for Not Availing Schemes", chart_subtitle="")
+        chartpeur24 = self.generate_bar_chart(data_to_visualize, x_title="Reason", y_title="Count", chart_title="PEUR - Distribution of Reasons for Not Availing Schemes", chart_subtitle="")
 
     
         # Chart 12: PEUR-Interested in YUVA for Upgrading
         filtered_data = df['interestedinyuvaforupgrading'].dropna().loc[lambda x: x != '---']
         xlabels, ydata = filtered_data.value_counts().index.tolist(), filtered_data.value_counts().values.tolist()
         data_to_visualize = [{'name': x, 'data': y} for (x, y) in zip(xlabels, ydata)]
-        chartpeur25 = self.generate_pie_chart(data_to_visualize, chart_title="PEUR-Interested in YUVA for Upgrading", chart_subtitle="")
+        chartpeur25 = self.generate_pie_chart(data_to_visualize, chart_title="Proportion of Businesses Interested in YUVA for Upgrading", chart_subtitle="")
 
         categories = [
         "Financial support",
@@ -897,7 +897,7 @@ class Chart:
             data_to_visualize,
             x_title="Assistance Type",
             y_title="Count",
-            chart_title="PEUR - Assistance Required in Scaling the Business",
+            chart_title="Distribution of Assistance Required for Scaling the Business",
             chart_subtitle=""
         )
 
@@ -911,7 +911,7 @@ class Chart:
                 data_to_visualize,
                 x_title="Skills",
                 y_title="Count",
-                chart_title="PEUR- Skills Required for Upgrading Business",
+                chart_title="Distribution of Skills Required for Upgrading Business",
                 chart_subtitle=""
             )
                     
@@ -925,7 +925,7 @@ class Chart:
                 data_to_visualize,
                 x_title="Activity",
                 y_title="Count",
-                chart_title="PEUR- Activity required under Training/Skill Upgradation",
+                chart_title="Distribution of Activities Required for Training/Skill Upgradation",
                 chart_subtitle=""
             )
         
@@ -951,7 +951,7 @@ class Chart:
         data_to_visualize = sorted(data_to_visualize, key=lambda x: desired_order.index(x[0]) if x[0] in desired_order else len(desired_order))
 
         # Generate the bar chart
-        chartpeur29 = self.generate_bar_chart(data_to_visualize, x_title="Financial Support", y_title="Counts", chart_title="Amount of Financial Support Needed", chart_subtitle="")
+        chartpeur29 = self.generate_bar_chart(data_to_visualize, x_title="Financial Support", y_title="Counts", chart_title="Distribution  of Amount of Financial Support Needed", chart_subtitle="")
 
 
         
@@ -964,7 +964,7 @@ class Chart:
         # Generate the pie chart
         chartpeur30 = self.generate_pie_chart(
             data_to_visualize,
-            chart_title="Role Model in Locality",
+            chart_title="Presence of Successful Entrepreneurs as Role Models in the Locality",
             chart_subtitle=""
         )
 
