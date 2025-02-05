@@ -33,7 +33,7 @@ def get_data(base_path='BaselineData', connect_type="filesystem"):
         print('Loading Individual Members: Successful!')
 
 
-        chunk_size = 10000  # Adjust based on memory
+        chunk_size = 10000  # xAdjust based on memory
         chunks = pd.read_csv(base_path+'/Form 1/self_employment_seekers.csv', dtype=str, chunksize=chunk_size)
         data_corpus['self_employment_seekers'] = pd.concat(chunks, ignore_index=True)
         #data_corpus['self_employment_seekers'] = pd.read_csv(base_path+'/Form 1/self_employment_seekers.csv')
