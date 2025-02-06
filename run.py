@@ -42,11 +42,7 @@ if not DEBUG:
 
 
 
-
-
-
-
 #Chart.generate_line_chart()
 
 if __name__ == "__main__":
-    app.run()
+    app.run("0.0.0.0", port=8080)

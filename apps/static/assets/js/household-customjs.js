@@ -254,7 +254,7 @@ async function loadChartSetHousehold(url, type) {
     const charts = data[type];
     const filtered_numbers = data['filtered_numbers'];
     //console.log(filtered_numbers);
-    await fetchGeneralNumbersFiltered(filtered_numbers);
+    await fetchGeneralNumbersFiltered(filtered_numbers, 'household');
     //console.log(district_wise_details);
     const mainContainer = document.getElementById('HouseholdChartsContainer');
     //mainContainer.style.gridTemplateColumns = `repeat(${getChartCount()}, 0.9fr)`;

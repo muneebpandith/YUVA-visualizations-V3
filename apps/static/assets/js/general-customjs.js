@@ -25,8 +25,17 @@ async function fetchGeneralNumbers(url) {
 
 
 
-async function fetchGeneralNumbersFiltered(data) {
+async function fetchGeneralNumbersFiltered(data, t="") {
     try {
+
+        if(t=="household"){
+            document.getElementById("individualmembersheader-1").innerHTML = "Number of Heads of households<br>&nbsp;";
+            document.getElementById("individualmembersheader-2").innerHTML = "Number of Heads of households<br>&nbsp;"
+        }
+        else{
+            document.getElementById("individualmembersheader-1").innerHTML = "Individual Members<br>&nbsp;";
+            document.getElementById("individualmembersheader-2").innerHTML = "Individual Members<br>&nbsp;";
+        }
         document.getElementById("hoh-number-total-1").innerHTML = data.hoh.number.toLocaleString('en-IN');
         document.getElementById("hoh-number-total-2").innerHTML = data.hoh.number.toLocaleString('en-IN');
         document.getElementById("individual-members-total-1").innerHTML = data.individual_members.number.toLocaleString('en-IN');
