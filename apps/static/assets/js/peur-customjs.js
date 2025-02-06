@@ -20,9 +20,9 @@ async function fetchFilterOptionsPEUR(url, targetDropdown) {
         //
         // console.log(data)
         data.options.forEach(item => {
-            if(item!="---") {
+            if(item!="---" && item!="NA") {
                 if(item=="Transgender") dropdown.innerHTML += `<option value="${item}">Others</option>`;
-                else dropdown.innerHTML += `<option value="${item}">${item}</option>`;
+               else dropdown.innerHTML += `<option value="${item}">${item}</option>`;
             }
 
         });
@@ -441,6 +441,10 @@ async function loadPEURFilters(x)
         {
             //await loadAssistanceYuvaPEUR(); 
         }
+    else if(x==12)
+            {
+                //await loadAssistanceYuvaPEUR(); 
+            }
    
     else if(x==13)
         {

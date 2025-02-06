@@ -33,4 +33,6 @@ apps/static/assets/.temp
 
 migrations
 
-dataset
+dataset/BaselineData
+dataset/BaselineDataTest
+
