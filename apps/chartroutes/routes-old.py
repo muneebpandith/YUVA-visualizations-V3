@@ -179,7 +179,7 @@ pee_numbers = data_corpus['pee'].shape[0]
 
 ###### OPTIONS ########
 @blueprint.route('/api/v2/fetch_numbers')
-@login_required
+# ** @login_required
 def get_numbers():
     # household_numbers = data_corpus['hoh_member'].shape[0]
     # #household_numbers_f = f"{household_numbers:,}"
@@ -205,7 +205,7 @@ def get_numbers():
 
 ###### OPTIONS ########
 @blueprint.route('/api/v2/fetch_options/<type_of_data>/<parameter>')
-@login_required
+# ** @login_required
 def get_options(type_of_data, parameter):
     """
     Fetches options based on the type of data and parameter.
@@ -1719,7 +1719,7 @@ charts_object = Chart()
 
 ###### CHARTS HOUSEHOLDS ########
 @blueprint.route('/api/v2/charts/household')
-@login_required
+# ** @login_required
 def get_households_charts():
     return jsonify({"Hi":"Household charts"})
 
