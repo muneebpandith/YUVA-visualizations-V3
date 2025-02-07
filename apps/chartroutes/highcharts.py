@@ -326,7 +326,7 @@ class Chart:
 
         categories = [
             "Diploma or certificate in medicine", "Diploma or certificate in other subjects", 
-            "Technical degree in engineering/technology", "Learned skilled by doing without formal training", 
+            "Technical degree in engineering/ technology", "Learned skilled by doing without formal training", 
             "Diploma or certificate in engineering/technology", "Technical degree in medicine", 
             "Technical degree in agriculture", "Technical degree in other subjects", 
             "Diploma or certificate in crafts", "Technical degree in crafts", "Diploma or certificate in: agriculture"

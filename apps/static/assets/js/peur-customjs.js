@@ -507,9 +507,10 @@ async function loadPEURCharts(x)
         const educationlevel = document.getElementById("peur-educationlevel").value;
         const sectorofenterprise = document.getElementById("peur-sectorofenterprise").value;
         const natureofbusiness = document.getElementById("peur-natureofbusiness").value;
-        const sourceofrawmaterial = document.getElementById("peur-sourceofrawmaterial").value;
+        const sourceofrawmaterial = encodeURIComponent(document.getElementById("peur-sourceofrawmaterial").value);
+        //alert(sourceofrawmaterial);
         const enterprisefinancialstatus = document.getElementById("peur-enterprisefinancialstatus").value;
-        const currentmarketreach = document.getElementById("peur-currentmarketreach").value; 
+        const currentmarketreach = encodeURIComponent(document.getElementById("peur-currentmarketreach").value); 
         //const expectedscaleofbusiness = document.getElementById("peur-expectedscaleofbusiness").value;
         const assistancerequiredforyuva = document.getElementById("peur-assistancerequiredforyuva").value;  
         

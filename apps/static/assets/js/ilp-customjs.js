@@ -314,7 +314,6 @@ function resetIlpFilters(currentDropdown)
 
 
 
-
 async function loadIlpCharts(x)
 {
     if(x==0){
@@ -339,9 +338,7 @@ async function loadIlpCharts(x)
         toggle_all_other_sections_ilp();
         document.getElementById('loadingbar').style.display='none';
 
-    }
-
-    
+    }    
 }
 
 

@@ -133,7 +133,7 @@ def get_data(base_path='BaselineData', connect_type="filesystem"):
 
 data_corpus = dict()
 
-load_subset = False
+load_subset = True
 if load_subset == True:
     base_path = 'dataset/BaselineDataTest'
 else:
@@ -194,6 +194,69 @@ pee_numbers = data_corpus['pee'].shape[0]
 
 
 
+def get_filtered_numbers(df_hoh_filtered, df_ilp_filtered, df_peur_filtered, df_pee_filtered, df_peu_filtered):
+    district_stats_filtered = dict()
+    for d in ['Anantnag', 'Baramulla', 'Budgam', 'Rajouri', 'Kupwara', 'Pulwama','Shopian', 'Poonch', 'Srinagar', 'Doda', 'Kulgam', 'Jammu', 'Kathua','Ganderbal', 'Bandipora', 'Reasi', 'Udhampur', 'Ramban', 'Kishtwar','Samba']:
+        district_stats_filtered[d] = {"peu":"0", "peur":"0", "pee":"0", "individual_members":"0", "households":"0"}
+
+    households_districts_filtered = pd.DataFrame(df_hoh_filtered['district'].value_counts())
+    individual_member_districts_filtered = pd.DataFrame(df_ilp_filtered['district'].value_counts())
+    peu_districts_filtered = pd.DataFrame(df_peu_filtered['district'].value_counts())
+    pee_districts_filtered = pd.DataFrame(df_pee_filtered['district'].value_counts())
+    peur_districts_filtered = pd.DataFrame(df_peur_filtered['district'].value_counts())
+
+
+
+    #needs to check
+    household_numbers_filtered = len(list(df_ilp_filtered['uniqueidofhousehold'].unique()))
+    #df_hoh_filtered.shape[0]
+    #household_numbers_f = f"{household_numbers:,}"
+    individual_numbers_filtered = df_ilp_filtered.shape[0]
+    #individual_numbers_f = f"{individual_numbers:,}"
+    peur_numbers_filtered = df_peur_filtered.shape[0]
+    peu_numbers_filtered = df_peu_filtered.shape[0]
+    #peu_numbers_f = f"{peu_numbers:,}"
+    pee_numbers_filtered = df_pee_filtered.shape[0]
+    #pee_numbers_f = f"{pee_numbers:,}"
+    
+
+    for i in range (households_districts_filtered.shape[0]):
+        #print(peu_districts.index[i], peu_districts['count'].iloc[i])
+        district_stats_filtered[households_districts_filtered.index[i]]['households'] = str(int(district_stats_filtered[households_districts_filtered.index[i]]['households']) + households_districts_filtered['count'].iloc[i])
+    
+    for i in range (individual_member_districts_filtered.shape[0]):
+        #print(peu_districts.index[i], peu_districts['count'].iloc[i])
+        district_stats_filtered[individual_member_districts.index[i]]['individual_members'] = str(int(district_stats_filtered[individual_member_districts_filtered.index[i]]['individual_members']) + individual_member_districts_filtered['count'].iloc[i])
+    
+    for i in range (peur_districts_filtered.shape[0]):
+        #print(peu_districts.index[i], peu_districts['count'].iloc[i])
+        district_stats_filtered[peur_districts_filtered.index[i]]['peur'] = str(int(district_stats_filtered[peur_districts_filtered.index[i]]['peur'])+ peur_districts_filtered['count'].iloc[i])
+
+    for i in range (pee_districts_filtered.shape[0]):
+        #print(peu_districts.index[i], peu_districts['count'].iloc[i])
+        district_stats_filtered[pee_districts_filtered.index[i]]['pee'] = str(int(district_stats_filtered[pee_districts_filtered.index[i]]['pee'])+ pee_districts_filtered['count'].iloc[i])
+
+    for i in range (peu_districts_filtered.shape[0]):
+        #print(peu_districts.index[i], peu_districts['count'].iloc[i])
+        district_stats_filtered[peu_districts_filtered.index[i]]['peu'] =  str(int(district_stats_filtered[peu_districts_filtered.index[i]]['peu']) + peu_districts_filtered['count'].iloc[i])
+
+    
+    hoh_details_filtered = {'number':household_numbers_filtered,'from':'','to':''}
+    ilp_details_filtered = {'number':individual_numbers_filtered,'from':'','to':''}
+    peur_details_filtered = {'number':peur_numbers_filtered,'from':'','to':''}
+    peu_details_filtered = {'number':peu_numbers_filtered,'from':'','to':''}
+    pee_details_filtered = {'number':pee_numbers_filtered,'from':'','to':''}
+    district_wise_details_filtered = {'number':district_stats_filtered,'from':'','to':''}
+
+
+    
+    #data_corpus['peur'] = data_corpus['hoh_member'].merge(data_corpus['household'], how='inner', left_on='trimmed_uniqueid', right_on='uniqueidofhousehold'0
+    #return jsonify({'hoh':household_numbers_f, 'individual_members':individual_numbers_f, 'peur':peur_numbers_f, 'pee':pee_numbers_f, 'peu':peu_numbers_f})
+    return {'hoh':hoh_details_filtered, 'individual_members':ilp_details_filtered, 'peur':peur_details_filtered, 'pee':pee_details_filtered,  'peu':peu_details_filtered, 'district_wise_details': district_wise_details_filtered }
+
+    
+   
+
 # def get_filtered_numbers(df_hoh_filtered, df_ilp_filtered, df_peur_filtered, df_pee_filtered, df_peu_filtered):
 #     district_stats_filtered = dict()
 #     for d in ['Anantnag', 'Baramulla', 'Budgam', 'Rajouri', 'Kupwara', 'Pulwama','Shopian', 'Poonch', 'Srinagar', 'Doda', 'Kulgam', 'Jammu', 'Kathua','Ganderbal', 'Bandipora', 'Reasi', 'Udhampur', 'Ramban', 'Kishtwar','Samba']:
@@ -218,23 +281,23 @@ pee_numbers = data_corpus['pee'].shape[0]
 
 #     for i in range (households_districts_filtered.shape[0]):
 #         #print(peu_districts.index[i], peu_districts['count'].iloc[i])
-#         district_stats_filtered[households_districts_filtered.index[i]]['households'] = str(int(district_stats_filtered[households_districts_filtered.index[i]]['households']) + households_districts_filtered['count'].iloc[i])
+#         district_stats_filtered[households_districts_filtered.index[i]]['households'] = str(int(district_stats_filtered[households_districts_filtered.index[i]]['households']))
     
 #     for i in range (individual_member_districts_filtered.shape[0]):
 #         #print(peu_districts.index[i], peu_districts['count'].iloc[i])
-#         district_stats_filtered[individual_member_districts.index[i]]['individual_members'] = str(int(district_stats_filtered[individual_member_districts_filtered.index[i]]['individual_members']) + individual_member_districts_filtered['count'].iloc[i])
+#         district_stats_filtered[individual_member_districts.index[i]]['individual_members'] = str(int(district_stats_filtered[individual_member_districts_filtered.index[i]]['individual_members']))
     
 #     for i in range (peur_districts_filtered.shape[0]):
 #         #print(peu_districts.index[i], peu_districts['count'].iloc[i])
-#         district_stats_filtered[peur_districts_filtered.index[i]]['peur'] = str(int(district_stats_filtered[peur_districts_filtered.index[i]]['peur'])+ peur_districts_filtered['count'].iloc[i])
+#         district_stats_filtered[peur_districts_filtered.index[i]]['peur'] = str(int(district_stats_filtered[peur_districts_filtered.index[i]]['peur']))
 
 #     for i in range (pee_districts_filtered.shape[0]):
 #         #print(peu_districts.index[i], peu_districts['count'].iloc[i])
-#         district_stats_filtered[pee_districts_filtered.index[i]]['pee'] = str(int(district_stats_filtered[pee_districts_filtered.index[i]]['pee'])+ pee_districts_filtered['count'].iloc[i])
+#         district_stats_filtered[pee_districts_filtered.index[i]]['pee'] = str(int(district_stats_filtered[pee_districts_filtered.index[i]]['pee']))
 
 #     for i in range (peu_districts_filtered.shape[0]):
 #         #print(peu_districts.index[i], peu_districts['count'].iloc[i])
-#         district_stats_filtered[peu_districts_filtered.index[i]]['peu'] =  str(int(district_stats_filtered[peu_districts_filtered.index[i]]['peu']) + peu_districts_filtered['count'].iloc[i])
+#         district_stats_filtered[peu_districts_filtered.index[i]]['peu'] =  str(int(district_stats_filtered[peu_districts_filtered.index[i]]['peu']))
 
     
 #     hoh_details_filtered = {'number':household_numbers_filtered,'from':'','to':''}
@@ -243,69 +306,10 @@ pee_numbers = data_corpus['pee'].shape[0]
 #     peu_details_filtered = {'number':peu_numbers_filtered,'from':'','to':''}
 #     pee_details_filtered = {'number':pee_numbers_filtered,'from':'','to':''}
 #     district_wise_details_filtered = {'number':district_stats_filtered,'from':'','to':''}
-
-
     
 #     #data_corpus['peur'] = data_corpus['hoh_member'].merge(data_corpus['household'], how='inner', left_on='trimmed_uniqueid', right_on='uniqueidofhousehold'0
 #     #return jsonify({'hoh':household_numbers_f, 'individual_members':individual_numbers_f, 'peur':peur_numbers_f, 'pee':pee_numbers_f, 'peu':peu_numbers_f})
 #     return {'hoh':hoh_details_filtered, 'individual_members':ilp_details_filtered, 'peur':peur_details_filtered, 'pee':pee_details_filtered,  'peu':peu_details_filtered, 'district_wise_details': district_wise_details_filtered }
-
-    
-   
-
-def get_filtered_numbers(df_hoh_filtered, df_ilp_filtered, df_peur_filtered, df_pee_filtered, df_peu_filtered):
-    district_stats_filtered = dict()
-    for d in ['Anantnag', 'Baramulla', 'Budgam', 'Rajouri', 'Kupwara', 'Pulwama','Shopian', 'Poonch', 'Srinagar', 'Doda', 'Kulgam', 'Jammu', 'Kathua','Ganderbal', 'Bandipora', 'Reasi', 'Udhampur', 'Ramban', 'Kishtwar','Samba']:
-        district_stats_filtered[d] = {"peu":"0", "peur":"0", "pee":"0", "individual_members":"0", "households":"0"}
-
-    households_districts_filtered = pd.DataFrame(df_hoh_filtered['district'].value_counts())
-    individual_member_districts_filtered = pd.DataFrame(df_ilp_filtered['district'].value_counts())
-    peu_districts_filtered = pd.DataFrame(df_peu_filtered['district'].value_counts())
-    pee_districts_filtered = pd.DataFrame(df_pee_filtered['district'].value_counts())
-    peur_districts_filtered = pd.DataFrame(df_peur_filtered['district'].value_counts())
-
-    household_numbers_filtered = df_hoh_filtered.shape[0]
-    #household_numbers_f = f"{household_numbers:,}"
-    individual_numbers_filtered = df_ilp_filtered.shape[0]
-    #individual_numbers_f = f"{individual_numbers:,}"
-    peur_numbers_filtered = df_peur_filtered.shape[0]
-    peu_numbers_filtered = df_peu_filtered.shape[0]
-    #peu_numbers_f = f"{peu_numbers:,}"
-    pee_numbers_filtered = df_pee_filtered.shape[0]
-    #pee_numbers_f = f"{pee_numbers:,}"
-    
-
-    for i in range (households_districts_filtered.shape[0]):
-        #print(peu_districts.index[i], peu_districts['count'].iloc[i])
-        district_stats_filtered[households_districts_filtered.index[i]]['households'] = str(int(district_stats_filtered[households_districts_filtered.index[i]]['households']))
-    
-    for i in range (individual_member_districts_filtered.shape[0]):
-        #print(peu_districts.index[i], peu_districts['count'].iloc[i])
-        district_stats_filtered[individual_member_districts.index[i]]['individual_members'] = str(int(district_stats_filtered[individual_member_districts_filtered.index[i]]['individual_members']))
-    
-    for i in range (peur_districts_filtered.shape[0]):
-        #print(peu_districts.index[i], peu_districts['count'].iloc[i])
-        district_stats_filtered[peur_districts_filtered.index[i]]['peur'] = str(int(district_stats_filtered[peur_districts_filtered.index[i]]['peur']))
-
-    for i in range (pee_districts_filtered.shape[0]):
-        #print(peu_districts.index[i], peu_districts['count'].iloc[i])
-        district_stats_filtered[pee_districts_filtered.index[i]]['pee'] = str(int(district_stats_filtered[pee_districts_filtered.index[i]]['pee']))
-
-    for i in range (peu_districts_filtered.shape[0]):
-        #print(peu_districts.index[i], peu_districts['count'].iloc[i])
-        district_stats_filtered[peu_districts_filtered.index[i]]['peu'] =  str(int(district_stats_filtered[peu_districts_filtered.index[i]]['peu']))
-
-    
-    hoh_details_filtered = {'number':household_numbers_filtered,'from':'','to':''}
-    ilp_details_filtered = {'number':individual_numbers_filtered,'from':'','to':''}
-    peur_details_filtered = {'number':peur_numbers_filtered,'from':'','to':''}
-    peu_details_filtered = {'number':peu_numbers_filtered,'from':'','to':''}
-    pee_details_filtered = {'number':pee_numbers_filtered,'from':'','to':''}
-    district_wise_details_filtered = {'number':district_stats_filtered,'from':'','to':''}
-    
-    #data_corpus['peur'] = data_corpus['hoh_member'].merge(data_corpus['household'], how='inner', left_on='trimmed_uniqueid', right_on='uniqueidofhousehold'0
-    #return jsonify({'hoh':household_numbers_f, 'individual_members':individual_numbers_f, 'peur':peur_numbers_f, 'pee':pee_numbers_f, 'peu':peu_numbers_f})
-    return {'hoh':hoh_details_filtered, 'individual_members':ilp_details_filtered, 'peur':peur_details_filtered, 'pee':pee_details_filtered,  'peu':peu_details_filtered, 'district_wise_details': district_wise_details_filtered }
 
 
 
@@ -353,6 +357,7 @@ def get_options(type_of_data, parameter):
     """
 
     set_of_type_of_data = list(data_corpus.keys())
+
     try:
         # Replace this with your actual logic to fetch options 
         # based on type_of_data and parameter
@@ -2283,10 +2288,10 @@ def get_households_charts_filtered():
     
     #Uncomment if you just want to know about HOH
     df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
+    df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueid_x'].isin(filtered_df['uniqueid_x']) & data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
+    df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
+    df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
+    df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
 
     # df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['hoh_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
     # df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['individual_member_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
@@ -2380,10 +2385,10 @@ def get_ilp_charts_filtered():
     filtered_df = df.copy()
     
     df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
+    df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueid_x'].isin(filtered_df['uniqueid_x']) & data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
+    df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
+    df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
+    df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
 
     #strict
     # df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
@@ -2491,10 +2496,11 @@ def get_pee_charts_filtered():
     filtered_df = df.copy()
 
     df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
+    df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueid_x'].isin(filtered_df['uniqueid_x']) & data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
+    df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
+    df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
+    df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
+
 
     #strict
     # df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
@@ -2602,10 +2608,10 @@ def get_peu_charts_filtered():
 
 
     df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
+    df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueid_x'].isin(filtered_df['uniqueid_x']) & data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
+    df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
+    df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
+    df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
 
     ##strict
     # df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
@@ -2704,12 +2710,27 @@ def get_peur_charts_filtered():
         df = df[df['natureofbusiness']==natureofbusiness]
         
     if not sourceofrawmaterial == "All":
-        df = df[df['rawmaterialsource']==sourceofrawmaterial]
-        
+        if not sourceofrawmaterial == "Others":
+            df = df[df['rawmaterialsource']==sourceofrawmaterial]
+        else:
+            df = df[df['rawmaterialsource']!="Internationally (imported)"]
+            df = df[df['rawmaterialsource']!="Locally(within the same district)"]
+            df = df[df['rawmaterialsource']!="Nationally(outside J&K)"]
+            df = df[df['rawmaterialsource']!="Regionally(within J&K)"]
+            df = df[df['rawmaterialsource']!="Self-sourced (e.g., in Agriculture )"]
+            df['rawmaterialsource']= "Others"
     if not enterprisefinancialstatus == "All":
         df = df[df['statusofenterprise']==enterprisefinancialstatus]
         
     if not currentmarketreach == "All":
+        if not currentmarketreach == "Others":
+            df = df[df['currentmarketreach']==currentmarketreach]
+        else:
+            df = df[df['currentmarketreach']!="International (export markets)"]
+            df = df[df['currentmarketreach']!="Local (within district)"]
+            df = df[df['currentmarketreach']!="National (outside J&K)"]
+            df = df[df['currentmarketreach']!="Regional (within J&K)"]
+            df['currentmarketreach']= "Others"
         df = df[df['currentmarketreach']==currentmarketreach]
        
     # if not expectedscaleofbusiness == "All":
@@ -2719,11 +2740,12 @@ def get_peur_charts_filtered():
         df = df[df['interestedinyuvaforupgrading']==assistancerequiredyuva]              
         
     filtered_df = df.copy()
+    
     df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
+    df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueid_x'].isin(filtered_df['uniqueid_x']) & data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
+    df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
+    df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
+    df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
 
     
     # df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
