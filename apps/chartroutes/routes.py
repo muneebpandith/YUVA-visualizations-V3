@@ -78,42 +78,61 @@ def get_data(base_path='BaselineData', connect_type="filesystem"):
     elif connect_type == "filesystem" and load_subset == False:
 
         print('Loading new dtaset')
+        #/ chunk_size = 10000  # Adjust based on memory
+        #/ chunks = pd.read_csv(base_path+'/hoh_result.csv', dtype=str, chunksize=chunk_size)
+        #/ data_corpus['hoh_result'] = pd.concat(chunks, ignore_index=True)
+        #/ #data_corpus['household_member'] = pd.read_csv(base_path+'/Form 1/household_member.csv')
+        #/ print('Loading Household Members: Successful!')
+
+
+
         # chunk_size = 10000  # Adjust based on memory
-        # chunks = pd.read_csv(base_path+'/hoh_result.csv', dtype=str, chunksize=chunk_size)
-        # data_corpus['hoh_result'] = pd.concat(chunks, ignore_index=True)
+        # chunks = pd.read_csv(base_path+'/individual_member_result.csv', dtype=str, chunksize=chunk_size)
+        # data_corpus['individual_member_result'] = pd.concat(chunks, ignore_index=True)
         # #data_corpus['household_member'] = pd.read_csv(base_path+'/Form 1/household_member.csv')
-        # print('Loading Household Members: Successful!')
+        # print('Loading Individual Members: Successful!')
+
+        # chunk_size = 10000  # Adjust based on memory
+        # chunks = pd.read_csv(base_path+'/peur_data.csv', dtype=str, chunksize=chunk_size)
+        # data_corpus['peur'] = pd.concat(chunks, ignore_index=True)
+        # #data_corpus['household_member'] = pd.read_csv(base_path+'/Form 1/household_member.csv')
+        # print('Loading PEUR Members: Successful!')
 
 
+        # chunk_size = 10000  # Adjust based on memory
+        # chunks = pd.read_csv(base_path+'/pee_data.csv', dtype=str, chunksize=chunk_size)
+        # data_corpus['pee'] = pd.concat(chunks, ignore_index=True)
+        # #data_corpus['household_member'] = pd.read_csv(base_path+'/Form 1/household_member.csv')
+        # print('Loading PEE Members: Successful!')
 
-        chunk_size = 10000  # Adjust based on memory
-        chunks = pd.read_csv(base_path+'/individual_member_result.csv', dtype=str, chunksize=chunk_size)
-        data_corpus['individual_member_result'] = pd.concat(chunks, ignore_index=True)
-        #data_corpus['household_member'] = pd.read_csv(base_path+'/Form 1/household_member.csv')
+        # chunk_size = 10000  # Adjust based on memory
+        # chunks = pd.read_csv(base_path+'/peu_data.csv', dtype=str, chunksize=chunk_size)
+        # data_corpus['peu'] = pd.concat(chunks, ignore_index=True)
+        # #data_corpus['household_member'] = pd.read_csv(base_path+'/Form 1/household_member.csv')
+        # print('Loading PEU Members: Successful!')
+        
+        # data_corpus['hoh_result'] = data_corpus['individual_member_result'][data_corpus['individual_member_result']['relationwithhoh'] == 'Self']
+        
+        
+        
+        data_corpus['individual_member_result'] = pd.read_csv(base_path+'/individual_member_result.csv')
         print('Loading Individual Members: Successful!')
 
-        chunk_size = 10000  # Adjust based on memory
-        chunks = pd.read_csv(base_path+'/peur_data.csv', dtype=str, chunksize=chunk_size)
-        data_corpus['peur'] = pd.concat(chunks, ignore_index=True)
-        #data_corpus['household_member'] = pd.read_csv(base_path+'/Form 1/household_member.csv')
+
+        data_corpus['peur'] = pd.read_csv(base_path+'/peur_data.csv')
         print('Loading PEUR Members: Successful!')
 
 
-        chunk_size = 10000  # Adjust based on memory
-        chunks = pd.read_csv(base_path+'/pee_data.csv', dtype=str, chunksize=chunk_size)
-        data_corpus['pee'] = pd.concat(chunks, ignore_index=True)
-        #data_corpus['household_member'] = pd.read_csv(base_path+'/Form 1/household_member.csv')
+        data_corpus['pee'] = pd.read_csv(base_path+'/pee_data.csv')
         print('Loading PEE Members: Successful!')
 
-        chunk_size = 10000  # Adjust based on memory
-        chunks = pd.read_csv(base_path+'/peu_data.csv', dtype=str, chunksize=chunk_size)
-        data_corpus['peu'] = pd.concat(chunks, ignore_index=True)
-        #data_corpus['household_member'] = pd.read_csv(base_path+'/Form 1/household_member.csv')
+       
+        data_corpus['peu'] = pd.read_csv(base_path+'/peu_data.csv')
         print('Loading PEU Members: Successful!')
         
         data_corpus['hoh_result'] = data_corpus['individual_member_result'][data_corpus['individual_member_result']['relationwithhoh'] == 'Self']
         
-        
+
         print('Loading Data: Successful!')
 
 
