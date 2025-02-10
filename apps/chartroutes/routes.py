@@ -12,8 +12,8 @@ from .highcharts import Chart
 
 
 def get_data(base_path='BaselineData', connect_type="filesystem"):
-    if connect_type == "filesystem":
-        print('Loading Data from File System...')
+    print('Loading Data from File System...')
+    if connect_type == "filesystem" and load_subset == True:
         #data_corpus['businessdetails'] = pd.read_csv(base_path+'/Form 2/businessdetails.csv')
         #data_corpus['businessidentity'] = pd.read_csv(base_path+'/Form 2/businessidentity.csv')
         #data_corpus['manpowerengaged'] = pd.read_csv(base_path+'/Form 2/manpowerengaged.csv')
@@ -64,71 +64,57 @@ def get_data(base_path='BaselineData', connect_type="filesystem"):
 
 
 
-        data_corpus['peur'] = data_corpus['individual_member_result'].merge(data_corpus['unregisteredactivities'], how='inner', left_on='uniqueid_x', right_on='memberid')
+        data_corpus['peur'] = data_corpus['individual_member_result'].merge(data_corpus['unregisteredactivities'], how='inner', left_on='uniqueid', right_on='memberid')
         data_corpus['peur'] = data_corpus['peur'][data_corpus['peur']['pecategory']=='PEUR']
 
-        data_corpus['pee'] = data_corpus['individual_member_result'].merge(data_corpus['self_employment_seekers'], how='inner', left_on='uniqueid_x', right_on='memberid')
+        data_corpus['pee'] = data_corpus['individual_member_result'].merge(data_corpus['self_employment_seekers'], how='inner', left_on='uniqueid', right_on='memberid')
         data_corpus['pee'] = data_corpus['pee'][data_corpus['pee']['pecategory']=='PEE']
 
-        data_corpus['peu'] = data_corpus['individual_member_result'].merge(data_corpus['self_employment_seekers'], how='inner', left_on='uniqueid_x', right_on='memberid')
+        data_corpus['peu'] = data_corpus['individual_member_result'].merge(data_corpus['self_employment_seekers'], how='inner', left_on='uniqueid', right_on='memberid')
         data_corpus['peu'] = data_corpus['peu'][data_corpus['peu']['pecategory']=='PEU']
         
         #print(data_corpus['peur'].shape[0],data_corpus['pee'].shape[0], data_corpus['peu'].shape[0] )
-
-
         print('Loading Data: Successful!')
-    
-    elif connect_type == "google-drive":
-        pass
-        # print('Loading Data from Google Drive!')
-        # data_corpus['gid_businessidentity'] = '1Fvrds513yknjDtqizSfk60JB_W1G1yjd'
-        # data_corpus['gid_businessdetails'] = '1ilaexFPOYPHXYNdXRppQh2VEVI9qZv4N'
-        # data_corpus['gid_manpowerengaged'] = '1rBzz6kNzpBQwvWAj93NXm1h4kaUgXPOd'
+    elif connect_type == "filesystem" and load_subset == False:
 
-        # data_corpus['url_businessidentity'] = f"https://drive.google.com/uc?id={data_corpus['gid_businessidentity']}&export=download"
-        # data_corpus['url_businessdetails'] = f"https://drive.google.com/uc?id={data_corpus['gid_businessdetails']}&export=download"
-        # data_corpus['url_manpowerengaged'] = f"https://drive.google.com/uc?id={data_corpus['gid_manpowerengaged']}&export=download"
-
-        # data_corpus['businessdetails'] = pd.read_csv(data_corpus['url_businessdetails'])
-        # data_corpus['businessidentity'] = pd.read_csv(data_corpus['url_businessidentity'])  #https://drive.google.com/file/d/1Fvrds513yknjDtqizSfk60JB_W1G1yjd/view?usp=sharing
-        # data_corpus['manpowerengaged'] = pd.read_csv(data_corpus['url_manpowerengaged'])
-
-        # #household
-        # data_corpus['gid_household'] = '1lD5OvSg9rAvPJR-kas_vn-wn1OatDr_L'
-        # data_corpus['gid_householdmember'] = '1zA5LjofLFsTsaKJbBKsVhyY8bYs3Pou9'
-        # data_corpus['gid_self_employment_seekers'] = '1AB8hDJYZy7wQdRX_AKZdZIgiePtkd0d_'
-        # data_corpus['gid_unregisteredactivities'] = '1Art08hVQ78krap0AWt32RKt37P6tymmX'
-
-        # data_corpus['url_household'] = f"https://drive.google.com/uc?id={data_corpus['gid_household']}&export=download"
-        # data_corpus['url_householdmember'] = f"https://drive.google.com/uc?id={data_corpus['gid_householdmember']}&export=download"
-        # data_corpus['url_self_employment_seekers'] = f"https://drive.google.com/uc?id={data_corpus['gid_self_employment_seekers']}&export=download"
-        # data_corpus['url_unregisteredactivities'] = f"https://drive.google.com/uc?id={data_corpus['gid_unregisteredactivities']}&export=download"
+        print('Loading new dtaset')
+        # chunk_size = 10000  # Adjust based on memory
+        # chunks = pd.read_csv(base_path+'/hoh_result.csv', dtype=str, chunksize=chunk_size)
+        # data_corpus['hoh_result'] = pd.concat(chunks, ignore_index=True)
+        # #data_corpus['household_member'] = pd.read_csv(base_path+'/Form 1/household_member.csv')
+        # print('Loading Household Members: Successful!')
 
 
 
-        # data_corpus['household'] = pd.read_csv(data_corpus['url_household'])
-        # data_corpus['household_member'] = pd.read_csv(data_corpus['url_householdmember'])  #https://drive.google.com/file/d/1Fvrds513yknjDtqizSfk60JB_W1G1yjd/view?usp=sharing
-        # data_corpus['self_employment_seekers'] = pd.read_csv(data_corpus['url_self_employment_seekers'])
-        # data_corpus['unregisteredactivities'] = pd.read_csv(data_corpus['url_unregisteredactivities'])
-       
-        # data_corpus['business_result'] = data_corpus['businessdetails'].merge(data_corpus['businessidentity'], how='inner')
-        # data_corpus['peur_result'] = data_corpus['household_member'].merge(data_corpus['unregisteredactivities'], how='inner', left_on='uniqueid', right_on='memberid')
-        # data_corpus['peu_result'] = data_corpus['household_member'].merge(data_corpus['self_employment_seekers'], how='inner', left_on='uniqueid', right_on='memberid')
-        # data_corpus['pee_result'] = data_corpus['household_member'].merge(data_corpus['self_employment_seekers'], how='inner', left_on='uniqueid', right_on='memberid')
-        # data_corpus['pee_result'] = data_corpus['pee_result'][data_corpus['pee_result']['pecategory']=='PEE']
-        # data_corpus['peu_result'] = data_corpus['peu_result'][data_corpus['peu_result']['pecategory']=='PEU']
-        # data_corpus['peur_result'] = data_corpus['peur_result'][data_corpus['peur_result']['pecategory']=='PEUR']
-        # print('Loading Data: Successful!')
+        chunk_size = 10000  # Adjust based on memory
+        chunks = pd.read_csv(base_path+'/individual_member_result.csv', dtype=str, chunksize=chunk_size)
+        data_corpus['individual_member_result'] = pd.concat(chunks, ignore_index=True)
+        #data_corpus['household_member'] = pd.read_csv(base_path+'/Form 1/household_member.csv')
+        print('Loading Individual Members: Successful!')
 
-        ### BUSINESS IDENTITY = https://drive.google.com/file/d/1Fvrds513yknjDtqizSfk60JB_W1G1yjd/view?usp=sharing
-        ### MANPOWERENGAGED = https://drive.google.com/file/d/1rBzz6kNzpBQwvWAj93NXm1h4kaUgXPOd/view?usp=sharing
-        ### BUSINESS DETAILS = https://drive.google.com/file/d/1ilaexFPOYPHXYNdXRppQh2VEVI9qZv4N/view?usp=sharing
-        ###HOUSEHOLD = https://drive.google.com/file/d/1lD5OvSg9rAvPJR-kas_vn-wn1OatDr_L/view?usp=sharing
-        ### HOUSEHOLD MEMBER = https://drive.google.com/file/d/1zA5LjofLFsTsaKJbBKsVhyY8bYs3Pou9/view?usp=sharing
-        ### SELFWMPLOYEMENT SEEKERS = https://drive.google.com/file/d/1AB8hDJYZy7wQdRX_AKZdZIgiePtkd0d_/view?usp=sharing
-        ### UNREGISTERED_ACTIVITIES = https://drive.google.com/file/d/1Art08hVQ78krap0AWt32RKt37P6tymmX/view?usp=sharing
+        chunk_size = 10000  # Adjust based on memory
+        chunks = pd.read_csv(base_path+'/peur_data.csv', dtype=str, chunksize=chunk_size)
+        data_corpus['peur'] = pd.concat(chunks, ignore_index=True)
+        #data_corpus['household_member'] = pd.read_csv(base_path+'/Form 1/household_member.csv')
+        print('Loading PEUR Members: Successful!')
 
 
+        chunk_size = 10000  # Adjust based on memory
+        chunks = pd.read_csv(base_path+'/pee_data.csv', dtype=str, chunksize=chunk_size)
+        data_corpus['pee'] = pd.concat(chunks, ignore_index=True)
+        #data_corpus['household_member'] = pd.read_csv(base_path+'/Form 1/household_member.csv')
+        print('Loading PEE Members: Successful!')
+
+        chunk_size = 10000  # Adjust based on memory
+        chunks = pd.read_csv(base_path+'/peu_data.csv', dtype=str, chunksize=chunk_size)
+        data_corpus['peu'] = pd.concat(chunks, ignore_index=True)
+        #data_corpus['household_member'] = pd.read_csv(base_path+'/Form 1/household_member.csv')
+        print('Loading PEU Members: Successful!')
+        
+        data_corpus['hoh_result'] = data_corpus['individual_member_result'][data_corpus['individual_member_result']['relationwithhoh'] == 'Self']
+        
+        
+        print('Loading Data: Successful!')
 
 
 data_corpus = dict()
@@ -137,7 +123,7 @@ load_subset = False
 if load_subset == True:
     base_path = 'dataset/BaselineDataTest'
 else:
-    base_path = 'dataset/BaselineData'  
+    base_path = 'dataset/BaselineDataNew'  
 
 get_data(base_path=base_path)
 
@@ -361,7 +347,7 @@ def get_options(type_of_data, parameter):
     try:
         # Replace this with your actual logic to fetch options 
         # based on type_of_data and parameter
-        if type_of_data in set_of_type_of_data:
+        if True: #changed from type_of_data in set_of_type_of_data:
             #HOUSEHOLD PART
             if type_of_data == 'household':
                 dataset_name = 'hoh_result'
@@ -2287,17 +2273,17 @@ def get_households_charts_filtered():
     
     
     #Uncomment if you just want to know about HOH
-    df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueid_x'].isin(filtered_df['uniqueid_x']) & data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
-    df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
-    df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
-    df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
+    df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueid'].isin(filtered_df['uniqueid'])]
+    df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueid'].isin(filtered_df['uniqueid']) & data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
+    df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid'].isin(df_ilp_filtered['uniqueid'])]
+    df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid'].isin(df_ilp_filtered['uniqueid'])]
+    df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid'].isin(df_ilp_filtered['uniqueid'])]
 
-    # df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['hoh_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['individual_member_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['peur']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['pee']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['peu']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
+    # df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['hoh_result']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['individual_member_result']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['peur']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['pee']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['peu']['uniqueid'].isin(filtered_df['uniqueid'])]
     
     
     filtered_numbers = get_filtered_numbers(df_hoh_filtered, df_ilp_filtered, df_peur_filtered, df_pee_filtered, df_peu_filtered)
@@ -2384,26 +2370,26 @@ def get_ilp_charts_filtered():
         
     filtered_df = df.copy()
     
-    df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueid_x'].isin(filtered_df['uniqueid_x']) & data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
-    df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
-    df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
-    df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
+    df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueid'].isin(filtered_df['uniqueid'])]
+    df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueid'].isin(filtered_df['uniqueid']) & data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
+    df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid'].isin(df_ilp_filtered['uniqueid'])]
+    df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid'].isin(df_ilp_filtered['uniqueid'])]
+    df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid'].isin(df_ilp_filtered['uniqueid'])]
 
     #strict
-    # df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
+    # df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueid'].isin(filtered_df['uniqueid'])]
     # df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
-    # df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
+    # df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid'].isin(filtered_df['uniqueid'])]
     
 
     #stricter
-    # df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['hoh_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['individual_member_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['peur']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['pee']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['peu']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
+    # df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['hoh_result']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['individual_member_result']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['peur']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['pee']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['peu']['uniqueid'].isin(filtered_df['uniqueid'])]
     
     filtered_numbers = get_filtered_numbers(df_hoh_filtered, df_ilp_filtered, df_peur_filtered, df_pee_filtered, df_peu_filtered)
     data = charts_object.all_ilp_charts(filtered_df, filtered_numbers)
@@ -2495,11 +2481,11 @@ def get_pee_charts_filtered():
         
     filtered_df = df.copy()
 
-    df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueid_x'].isin(filtered_df['uniqueid_x']) & data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
-    df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
-    df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
-    df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
+    df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueid'].isin(filtered_df['uniqueid'])]
+    df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueid'].isin(filtered_df['uniqueid']) & data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
+    df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid'].isin(df_ilp_filtered['uniqueid'])]
+    df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid'].isin(df_ilp_filtered['uniqueid'])]
+    df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid'].isin(df_ilp_filtered['uniqueid'])]
 
 
     #strict
@@ -2509,11 +2495,11 @@ def get_pee_charts_filtered():
     # df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
     # df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
     
-    # df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['hoh_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['individual_member_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['peur']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['pee']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['peu']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
+    # df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['hoh_result']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['individual_member_result']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['peur']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['pee']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['peu']['uniqueid'].isin(filtered_df['uniqueid'])]
     
     filtered_numbers = get_filtered_numbers(df_hoh_filtered, df_ilp_filtered, df_peur_filtered, df_pee_filtered, df_peu_filtered)
     
@@ -2607,11 +2593,11 @@ def get_peu_charts_filtered():
 
 
 
-    df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueid_x'].isin(filtered_df['uniqueid_x']) & data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
-    df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
-    df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
-    df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
+    df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueid'].isin(filtered_df['uniqueid'])]
+    df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueid'].isin(filtered_df['uniqueid']) & data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
+    df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid'].isin(df_ilp_filtered['uniqueid'])]
+    df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid'].isin(df_ilp_filtered['uniqueid'])]
+    df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid'].isin(df_ilp_filtered['uniqueid'])]
 
     ##strict
     # df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
@@ -2621,11 +2607,11 @@ def get_peu_charts_filtered():
     # df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
     
     #stricterf
-    # df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['hoh_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['individual_member_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['peur']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['pee']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['peu']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
+    # df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['hoh_result']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['individual_member_result']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['peur']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['pee']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['peu']['uniqueid'].isin(filtered_df['uniqueid'])]
     
     filtered_numbers = get_filtered_numbers(df_hoh_filtered, df_ilp_filtered, df_peur_filtered, df_pee_filtered, df_peu_filtered)
     data = charts_object.all_peu_charts(filtered_df, filtered_numbers)
@@ -2741,11 +2727,11 @@ def get_peur_charts_filtered():
         
     filtered_df = df.copy()
     
-    df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueid_x'].isin(filtered_df['uniqueid_x']) & data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
-    df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
-    df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
-    df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid_x'].isin(df_ilp_filtered['uniqueid_x'])]
+    df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueid'].isin(filtered_df['uniqueid'])]
+    df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueid'].isin(filtered_df['uniqueid']) & data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
+    df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid'].isin(df_ilp_filtered['uniqueid'])]
+    df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid'].isin(df_ilp_filtered['uniqueid'])]
+    df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid'].isin(df_ilp_filtered['uniqueid'])]
 
     
     # df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
@@ -2757,11 +2743,11 @@ def get_peur_charts_filtered():
 
 
     #stricters
-    # df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['hoh_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['individual_member_result']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['peur']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['pee']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
-    # df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['peu']['uniqueid_x'].isin(filtered_df['uniqueid_x'])]
+    # df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['hoh_result']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['individual_member_result']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['peur']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['pee']['uniqueid'].isin(filtered_df['uniqueid'])]
+    # df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['peu']['uniqueid'].isin(filtered_df['uniqueid'])]
     
     filtered_numbers = get_filtered_numbers(df_hoh_filtered, df_ilp_filtered, df_peur_filtered, df_pee_filtered, df_peu_filtered)
     
