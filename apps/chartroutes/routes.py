@@ -603,6 +603,15 @@ def get_options(type_of_data, parameter):
                     options = list(filtered_data[parameter].unique())
                     options = sorted(["NA" if isinstance(x, float) and np.isnan(x) else x for x in options])
                     #print(options)
+                elif parameter == 'changepresentwork':
+                    options = list(filtered_data[parameter].unique())
+                    options = sorted(["NA" if isinstance(x, float) and np.isnan(x) else x for x in options])
+                    #print(options)
+
+                elif parameter == 'pursuinghighereducation':
+                    options = list(filtered_data[parameter].unique())
+                    options = sorted(["NA" if isinstance(x, float) and np.isnan(x) else x for x in options])
+                    #print(options)
                 
                 else:
                     abort(404, f"Invalid area_type '{parameter}'")
@@ -2328,6 +2337,8 @@ def get_ilp_charts_filtered():
     educationlevel = request.args.get("educationlevel")
     employmentstatus = request.args.get("employmentstatus")
     annualincome = request.args.get("annualincome")
+    changepresentwork = request.args.get("changepresentwork")
+    pursuinghighereducation= request.args.get("pursuinghighereducation")
                     
 
     if not residentialtype == "All":
@@ -2387,6 +2398,12 @@ def get_ilp_charts_filtered():
     
     if not annualincome == "All":
         df = df[df['annualincome']==annualincome]
+    
+    if not changepresentwork == "All":
+        df = df[df['changepresentwork']==changepresentwork]
+
+    if not pursuinghighereducation == "All":
+        df = df[df['pursuinghighereducation']==pursuinghighereducation]
         
         
     filtered_df = df.copy()

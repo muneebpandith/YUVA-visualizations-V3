@@ -1,6 +1,3 @@
-
-
-
 // ****** ILP PART   *********//
 const ilp_dropdowns = ["ilp-areatype", "ilp-district", "ilp-blockmunicipality", "ilp-panchayatward"]
 //"ilp-age", "ilp-gender", "ilp-educationlevel", "ilp-employmentstatus", "ilp-annualincome" 
@@ -199,6 +196,29 @@ async function loadAnnualIncomeIlp() {
 }
 
 
+async function loadChangePresentWorkIlp() {
+    
+    try {
+        //await fetchFilterOptionsIlp(base_url_filter_options+'/individual_member/annualincome?residentialtype='+areaType+'&district='+district+'&cdblockulbmc='+blockmunicipality+'&panchayatward='+panchayatward+'&age='+age+'&gender='+gender+'&educationlevel='+educationlevel+'&employmentstatus='+employmentstatus, "ilp-annualincome");
+        await fetchFilterOptionsIlp(base_url_filter_options+'/individual_member/changepresentwork', "ilp-changepresentwork");
+    }
+    catch (error){
+        alert('E.ILP.9: Some error occured. Reload the page.')
+    }
+}
+
+
+async function loadPursuingHigherEducationIlp() {
+    
+    try {
+        //await fetchFilterOptionsIlp(base_url_filter_options+'/individual_member/annualincome?residentialtype='+areaType+'&district='+district+'&cdblockulbmc='+blockmunicipality+'&panchayatward='+panchayatward+'&age='+age+'&gender='+gender+'&educationlevel='+educationlevel+'&employmentstatus='+employmentstatus, "ilp-annualincome");
+        await fetchFilterOptionsIlp(base_url_filter_options+'/individual_member/pursuinghighereducation', "ilp-pursuinghighereducation");
+    }
+    catch (error){
+        alert('E.ILP.9: Some error occured. Reload the page.')
+    }
+}
+
 
 async function loadIlpFilters(x)
 {
@@ -280,6 +300,14 @@ async function loadIlpFilters(x)
         {
             
         }
+    else if(x==9)
+        {
+                
+        }
+    else if(x==10)
+        {
+                    
+        }
     else{
             await loadAreaTypeIlp();
             // await loadDistrictsIlp();
@@ -290,6 +318,10 @@ async function loadIlpFilters(x)
             await loadEducationLevelIlp();
             await loadEmploymentStatusIlp();
             await loadAnnualIncomeIlp();
+            await loadChangePresentWorkIlp();
+            await loadPursuingHigherEducationIlp();
+            
+            
     }
 }
 
@@ -318,7 +350,7 @@ async function loadIlpCharts(x)
 {
     if(x==0){
         //http://127.0.0.1:8080/api/v2/charts-filtered/individual_member?residentialtype=All&district=All&cdblockulbmc=All&panchayatward=All&age=All&gender=All&educationlevel=All&employmentstatus=All
-        var params = "residentialtype=All&district=All&cdblockulbmc=All&panchayatward=All&age=All&gender=All&educationlevel=All&employmentstatus=All&annualincome=All";
+        var params = "residentialtype=All&district=All&cdblockulbmc=All&panchayatward=All&age=All&gender=All&educationlevel=All&employmentstatus=All&annualincome=All&changepresentwork=All&pursuinghighereducation=All";
         await loadChartSetIlp(base_url_charts+'/individual_member?'+params, 'ilp');
     }
     else{
@@ -331,8 +363,12 @@ async function loadIlpCharts(x)
         const educationlevel = document.getElementById("ilp-educationlevel").value; 
         const employmentstatus = document.getElementById("ilp-employmentstatus").value; 
         const annualincome = document.getElementById("ilp-annualincome").value; 
+        const changepresentwork = document.getElementById("ilp-changepresentwork").value; 
+        const pursinghighereducation = document.getElementById("ilp-pursuinghighereducation").value; 
         
-        var params = 'residentialtype='+areaType+'&district='+district+'&cdblockulbmc='+blockmunicipality+'&panchayatward='+panchayatward+'&age='+age+'&gender='+gender+'&educationlevel='+educationlevel+'&employmentstatus='+employmentstatus+'&annualincome='+annualincome;
+        
+
+        var params = 'residentialtype='+areaType+'&district='+district+'&cdblockulbmc='+blockmunicipality+'&panchayatward='+panchayatward+'&age='+age+'&gender='+gender+'&educationlevel='+educationlevel+'&employmentstatus='+employmentstatus+'&annualincome='+annualincome+'&changepresentwork='+changepresentwork+'&pursuinghighereducation='+pursinghighereducation;
         document.getElementById('loadingbar').style.display='flex';
         await loadChartSetIlp(base_url_charts+'/individual_member?'+params, 'ilp');
         toggle_all_other_sections_ilp();
