@@ -184,15 +184,14 @@ for i in range (households_districts.shape[0]):
     district_stats[households_districts.index[i]]['households'] = str(int(district_stats[households_districts.index[i]]['households']) + households_districts['count'].iloc[i])
 
 
-
-household_numbers = len(data_corpus['hoh_result']['uniqueidofhousehold'].unique())
+household_numbers = len(data_corpus['hoh_result']['uniqueidofmember'].unique())
 #household_numbers_f = f"{household_numbers:,}"
 individual_numbers = len(data_corpus['individual_member_result']['uniqueidofmember'].unique())
 #individual_numbers_f = f"{individual_numbers:,}"
-peur_numbers = len(data_corpus['peur'][df_h['pecategory']=='PEUR']['uniqueidofmember'].unique())
-peu_numbers = len(data_corpus['peur'][df_h['pecategory']=='PEU']['uniqueidofmember'].unique())
+peur_numbers = len(data_corpus['peur'][data_corpus['peur']['pecategory']=='PEUR']['uniqueidofmember'].unique())
+peu_numbers = len(data_corpus['peu'][data_corpus['peu']['pecategory']=='PEU']['uniqueidofmember'].unique())
 #peu_numbers_f = f"{peu_numbers:,}"
-pee_numbers = len(data_corpus['peur'][df_h['pecategory']=='PEE']['uniqueidofmember'].unique())
+pee_numbers = len(data_corpus['pee'][data_corpus['pee']['pecategory']=='PEE']['uniqueidofmember'].unique())
 #pee_numbers_f = f"{pee_numbers:,}"
 ##### FOR NUMBERS ENDING   ####
 
@@ -214,7 +213,7 @@ def get_filtered_numbers(df_hoh_filtered, df_ilp_filtered, df_peur_filtered, df_
 
 
     #needs to check
-    household_numbers_filtered = len(list(df_hoh_filtered['uniqueidofhousehold'].unique()))
+    household_numbers_filtered = len(list(df_hoh_filtered['uniqueidofmember'].unique()))
     #df_hoh_filtered.shape[0]
     #household_numbers_f = f"{household_numbers:,}"
     individual_numbers_filtered = len(list(df_ilp_filtered['uniqueidofmember'].unique()))
@@ -2292,13 +2291,15 @@ def get_households_charts_filtered():
 
     
     
-    #Uncomment if you just want to know about HOH
-    df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueid'].isin(filtered_df['uniqueid'])]
+    
+    df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
     df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueid'].isin(filtered_df['uniqueid']) & data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold'])]
     df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueid'].isin(df_ilp_filtered['uniqueid'])]
     df_pee_filtered = data_corpus['pee'][data_corpus['pee']['uniqueid'].isin(df_ilp_filtered['uniqueid'])]
     df_peu_filtered = data_corpus['peu'][data_corpus['peu']['uniqueid'].isin(df_ilp_filtered['uniqueid'])]
 
+
+    #Uncomment if you just want to know about HOH
     # df_hoh_filtered = data_corpus['hoh_result'][data_corpus['hoh_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['hoh_result']['uniqueid'].isin(filtered_df['uniqueid'])]
     # df_ilp_filtered = data_corpus['individual_member_result'][data_corpus['individual_member_result']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['individual_member_result']['uniqueid'].isin(filtered_df['uniqueid'])]
     # df_peur_filtered = data_corpus['peur'][data_corpus['peur']['uniqueidofhousehold'].isin(filtered_df['uniqueidofhousehold']) & data_corpus['peur']['uniqueid'].isin(filtered_df['uniqueid'])]

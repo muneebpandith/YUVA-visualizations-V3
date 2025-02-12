@@ -45,4 +45,4 @@ if not DEBUG:
 #Chart.generate_line_chart()
 
 if __name__ == "__main__":
-    app.run("0.0.0.0", port=8080)
+    app.run("0.0.0.0", port=8081)
