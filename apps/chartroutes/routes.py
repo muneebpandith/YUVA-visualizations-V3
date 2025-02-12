@@ -115,19 +115,19 @@ def get_data(base_path='BaselineData', connect_type="filesystem"):
         
         
         
-        data_corpus['individual_member_result'] = pd.read_csv(base_path+'/individual_member_result.csv')
+        data_corpus['individual_member_result'] = pd.read_csv(base_path+'/individual_member_result_cleaned.csv')
         print('Loading Individual Members: Successful!')
 
 
-        data_corpus['peur'] = pd.read_csv(base_path+'/peur_data.csv')
+        data_corpus['peur'] = pd.read_csv(base_path+'/peur_data_cleaned.csv')
         print('Loading PEUR Members: Successful!')
 
 
-        data_corpus['pee'] = pd.read_csv(base_path+'/pee_data.csv')
+        data_corpus['pee'] = pd.read_csv(base_path+'/pee_data_cleaned.csv')
         print('Loading PEE Members: Successful!')
 
        
-        data_corpus['peu'] = pd.read_csv(base_path+'/peu_data.csv')
+        data_corpus['peu'] = pd.read_csv(base_path+'/peu_data_cleaned.csv')
         print('Loading PEU Members: Successful!')
         
         data_corpus['hoh_result'] = data_corpus['individual_member_result'][data_corpus['individual_member_result']['relationwithhoh'] == 'Self']
@@ -142,7 +142,7 @@ load_subset = False
 if load_subset == True:
     base_path = 'dataset/BaselineDataTest'
 else:
-    base_path = 'dataset/BaselineDataNew'  
+    base_path = 'dataset/BaselineDataNew2'  
 
 get_data(base_path=base_path)
 
