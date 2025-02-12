@@ -154,6 +154,9 @@ district_stats = dict()
 for d in ['Anantnag', 'Baramulla', 'Budgam', 'Rajouri', 'Kupwara', 'Pulwama','Shopian', 'Poonch', 'Srinagar', 'Doda', 'Kulgam', 'Jammu', 'Kathua','Ganderbal', 'Bandipora', 'Reasi', 'Udhampur', 'Ramban', 'Kishtwar','Samba']:
     district_stats [d] = {"peu":"0", "peur":"0", "pee":"0", "individual_members":"0", "households":"0"}
 
+
+
+
 households_districts = pd.DataFrame(data_corpus['hoh_result']['district'].value_counts())
 individual_member_districts = pd.DataFrame(data_corpus['individual_member_result']['district'].value_counts())
 peu_districts = pd.DataFrame(data_corpus['peu']['district'].value_counts())
@@ -183,11 +186,14 @@ for i in range (households_districts.shape[0]):
 
 
 
-household_numbers = data_corpus['hoh_result'].shape[0]
+
+household_numbers = len(data_corpus['hoh_result']['uniqueidofhousehold'].unique())
 #household_numbers_f = f"{household_numbers:,}"
 individual_numbers = data_corpus['individual_member_result'].shape[0]
 #individual_numbers_f = f"{individual_numbers:,}"
-peur_numbers = data_corpus['peur'].shape[0]
+peur_numbers = len(data_corpus['peur'][df_h['pecategory']=='PEUR']['uniqueidofhousehold'].unique())
+
+data_corpus['peur'].shape[0]
 peu_numbers = data_corpus['peu'].shape[0]
 #peu_numbers_f = f"{peu_numbers:,}"
 pee_numbers = data_corpus['pee'].shape[0]
@@ -216,7 +222,7 @@ def get_filtered_numbers(df_hoh_filtered, df_ilp_filtered, df_peur_filtered, df_
     household_numbers_filtered = len(list(df_ilp_filtered['uniqueidofhousehold'].unique()))
     #df_hoh_filtered.shape[0]
     #household_numbers_f = f"{household_numbers:,}"
-    individual_numbers_filtered = df_ilp_filtered.shape[0]
+    individual_numbers_filtered = len(list(df_ilp_filtered['uniqueidofhousehold'].unique()))
     #individual_numbers_f = f"{individual_numbers:,}"
     peur_numbers_filtered = df_peur_filtered.shape[0]
     peu_numbers_filtered = df_peu_filtered.shape[0]
