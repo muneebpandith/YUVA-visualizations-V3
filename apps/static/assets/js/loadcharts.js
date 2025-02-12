@@ -1,60 +1,26 @@
 
 function generatePieChart(canvas, chart) {
     Highcharts.chart(canvas, {
-        chart: { type: chart.type},
-        title: { text: chart.chart_title},
+        chart: { type: chart.type },
+        title: { text: chart.chart_title },
         subtitle: { text: chart.chart_subtitle },
         tooltip: { 
-            pointFormat: '{point.name}: <b>{point.y:.1f}</b>' // Show as percentage
-        },
-        dataLabels: {
-            enabled: true,
-            format: '<b>{point.name}</b>: {point.y:.1f}%',
-            style: {
-                fontSize: '14px',
-                fontWeight: 'bold',
-                color: '#333'
-            }
+            pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>' // Fix for correct tooltip
         },
         plotOptions: {
-            series: {
+            pie: {
                 allowPointSelect: true,
                 cursor: 'pointer',
-                dataLabels: [{
+                dataLabels: {
                     enabled: true,
-                    distance: 20,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f}%', // Fix for correct data display
                     style: {
-                        fontSize: '18px',
-                        textOutline: 'none',
-                        opacity: 0.7
-                    },
-                    //format: '{point.name}: {point.y:.1f}%', // Comment to show labels inside slices
-                }, {
-                    enabled: true,
-                    distance: -40,
-                    format: '{point.percentage:.1f}%',
-                    style: {
-                        fontSize: '16px',
-                        textOutline: 'none',
-                        opacity: 0.7
-                    },
-                    
-                    // filter: {
-                    //     operator: '>',
-                    //     property: 'percentage',
-                    //     value: 10
-                    // }  //uncomment to apply to show labels only greater than 10 percent for example
-                }],
-                showInLegend: true, // Enable legend
-                /*borderWidth: 5,
-                borderColor: '#000',
-                shadow: {
-                    color: 'rgba(0, 0, 0, 0.2)',
-                    offsetX: 2,
-                    offsetY: 2,
-                    opacity: 0.5,
-                    width: 5
-                } Uncomment to apply border effects*/ 
+                        fontSize: '14px',
+                        fontWeight: 'bold',
+                        color: '#333'
+                    }
+                },
+                showInLegend: true
             }
         },
         legend: {
@@ -70,10 +36,14 @@ function generatePieChart(canvas, chart) {
         },
         series: [{
             name: chart.series[0].name,
-            data: chart.series[0].data.map(item => ({ name: item.name, y: item.data * 100 })) // Convert to percentage
+            data: chart.series[0].data.map(item => ({
+                name: item.name,
+                y: item.data // Removed * 100, assuming data is already in correct format
+            }))
         }]
     });
 }
+
 
 xx = [];
 function generateColumnChart(canvas, chart) {
@@ -127,7 +97,7 @@ function generateColumnChart(canvas, chart) {
                         // Calculate percentage
                         const percentage = ((this.y / total) * 100).toFixed(0);
                         // Format value in 'k' and add percentage
-                        return `${formatValue(this.y)}, ${percentage}%`;
+                        return `${formatValue(this.y)}(${percentage}%)`;
                     },
                 }
             }
@@ -174,6 +144,58 @@ function generateColumnChart(canvas, chart) {
             groupPadding: 0,
             data: chart.series[0].data
         }]
+    });
+}
+
+function generateGroupedBarChart(canvas, chart) {
+    const totalValues = chart.series.flatMap(series => series.data);
+    const total = totalValues.reduce((sum, value) => sum + value, 0);
+    Highcharts.chart(canvas, {
+        chart: { type: 'column' },  // Change to 'column' for vertical bars
+        title: { text: chart.chart_title },
+        subtitle: { text: chart.chart_subtitle },
+        xAxis: {
+            categories: chart.x_axis.categories,
+            crosshair: true,
+            accessibility: {
+                description: 'Countries'
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: { text: chart.y_axis.title }
+        },
+        tooltip: { shared: true },
+        plotOptions: {
+            column: {
+                dataLabels: {
+                    enabled: true,
+                    verticalAlign: 'bottom',  // Position the label at the top of the column
+                    style: {
+                        fontSize: '12px',
+                        fontWeight: 'bold',
+                        color: '#333'
+                    },
+                    formatter: function () {
+                        if (typeof this.y !== 'number' || isNaN(this.y)) {
+                            console.error("Invalid value in dataLabels formatter:", this.y);
+                            return 'N/A';
+                        }
+
+                        // Compute total sum for this category
+                        const categoryIndex = this.point.index;
+                        const categoryTotal = chart.series.reduce((sum, series) => sum + series.data[categoryIndex], 0);
+
+                        // Calculate percentage relative to category total
+                        const percentage = ((this.y / categoryTotal) * 100).toFixed(1);
+                        return `${formatValue(this.y)} (${percentage}%)`;
+                    },
+                },
+                pointPadding: 0.2,
+                borderWidth: 0
+        }
+        },
+       series: chart.series  // Ensure Python is sending valid JSON data
     });
 }
 

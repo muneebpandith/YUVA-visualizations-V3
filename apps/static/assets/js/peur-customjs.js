@@ -558,6 +558,9 @@ async function loadChartSetPEUR(url, type) {
             {
                 generatePieChart(canvas, chart);   //defined in loadchartsjs.js
             }
+        else if (chart.type == 'column' && chart.series.length > 1) {
+                generateGroupedBarChart(canvas, chart);  // Call the grouped chart function
+            } 
         else if(chart.type=='column')
             {
                 generateColumnChart(canvas, chart);   //defined in loadchartsjs.js

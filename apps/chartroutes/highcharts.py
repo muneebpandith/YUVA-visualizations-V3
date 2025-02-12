@@ -1,5 +1,6 @@
 import random
 import pandas as pd
+import ast 
 class Chart:
     def __init__(self):
         #print("Loaded charts")
@@ -23,29 +24,26 @@ class Chart:
 
 
 
-    def generate_grouped_bar_chart(self, x_labels, dataset, x_title= "", y_title = "", chart_title="", chart_subtitle="", grouped="NO", multicolor="NO",  horizontal="NO"):
+    def generate_grouped_bar_chart(self, x_labels, dataset, x_title= "", y_title = "", chart_title="", chart_subtitle="", grouped="YES",  horizontal="NO"):
         #dataset can have a array of of x's y's i.e., [[[2,3,4],[4,5,6]], [[0,1,2],[4,5,6]]], here there are two sets of x's and y's
         if grouped == "NO":
             chart_config = {
-                'type': 'bar',
-                'multicolor': multicolor,
+                'type': 'column',
                 'horizontal': horizontal,
                 'chart_title': chart_title,
                 'chart_subtitle':chart_subtitle,
                 'x_axis': {'title': x_title, 'categories': [' ']}, # Districts
-                'y_axis': {'title': y_title, 'data':[]},
+                'y_axis': {'title': y_title},
                 'series': [{'name':dataset[i]['name'], 'data':dataset[i]['data']} for i in range(len(dataset))]
             }
         else:
             #MOSTLY NOT USED as this creates Districts on X-axis and in each district, enters a bar
             chart_config = {
-                'type': 'bar',
-                'multicolor': multicolor,
-                'horizontal': horizontal,
+                'type': 'column',
                 'chart_title': chart_title,
                 'chart_subtitle':chart_subtitle,
-                'x_axis': {'title': x_title, 'categories': x_labels}, # Districts
-                'y_axis': {'title': y_title, 'data':[]},
+                'x_axis': { 'categories': x_labels}, # Districts
+                'y_axis': {'title': y_title,},
                 'series': [{'name':dataset[i]['name'], 'data':dataset[i]['data']} for i in range(len(dataset))]
             }
         return chart_config
@@ -604,6 +602,88 @@ class Chart:
             chart_subtitle=""
         )
         
+        # Sum values for each column
+        total_local_female_skilled = df['localfemaleskilled'].replace('---', 0).fillna(0).astype(int).sum()
+        total_local_female_unskilled = df['localfemaleunskilled'].replace('---', 0).fillna(0).astype(int).sum()
+        total_local_male_skilled = df['localmaleskilled'].replace('---', 0).fillna(0).astype(int).sum()
+        total_local_male_unskilled = df['localmaleunskilled'].replace('---', 0).fillna(0).astype(int).sum()
+
+        # Prepare data for visualization
+        categories = ['Local Female Skilled', 'Local Female Unskilled', 'Local Male Skilled', 'Local Male Unskilled']
+        values = [total_local_female_skilled, total_local_female_unskilled, total_local_male_skilled, total_local_male_unskilled]
+
+        # Combine into data format for bar chart
+        data_to_visualize = [[x, int(y)] for x, y in zip(categories, values)]
+
+        # Generate bar chart
+        chartpeeur1 = self.generate_bar_chart(
+            data_to_visualize, 
+            x_title="Category", 
+            y_title="Total Count", 
+            chart_title="Distribution of Local Skilled and Unskilled Workforce", 
+            chart_subtitle=""
+        )
+
+        # Sum values for each column
+        total_nonlocal_female_skilled = df['nonlocalfemaleskilled'].replace('---', 0).fillna(0).astype(int).sum()
+        total_nonlocal_female_unskilled = df['nonlocalfemaleunskilled'].replace('---', 0).fillna(0).astype(int).sum()
+        total_nonlocal_male_skilled = df['nonlocalmaleskilled'].replace('---', 0).fillna(0).astype(int).sum()
+        total_nonlocal_male_unskilled = df['nonlocalmaleunskilled'].replace('---', 0).fillna(0).astype(int).sum()
+
+        # Prepare data for visualization
+        categories = ['Non-Local Female Skilled', 'Non-Local Female Unskilled', 'Non-Local Male Skilled', 'Non-Local Male Unskilled']
+        values = [total_nonlocal_female_skilled, total_nonlocal_female_unskilled, total_nonlocal_male_skilled, total_nonlocal_male_unskilled]
+
+        # Combine into data format for bar chart
+        data_to_visualize = [[x, int(y)] for x, y in zip(categories, values)]
+
+        # Generate bar chart
+        chartpeeur2 = self.generate_bar_chart(
+            data_to_visualize, 
+            x_title="Category", 
+            y_title="Total Count", 
+            chart_title="Distribution of Non-Local Skilled and Unskilled Workforce", 
+            chart_subtitle=""
+        )
+        
+        # Define categories
+        categories = ['Female Skilled', 'Female Unskilled', 'Male Skilled', 'Male Unskilled']
+
+        # Prepare data for local workforce
+        local_values = [
+            int(df['localfemaleskilled'].replace('---', 0).fillna(0).astype(int).sum()),
+            int(df['localfemaleunskilled'].replace('---', 0).fillna(0).astype(int).sum()),
+            int(df['localmaleskilled'].replace('---', 0).fillna(0).astype(int).sum()),
+            int(df['localmaleunskilled'].replace('---', 0).fillna(0).astype(int).sum())
+        ]
+
+        # Prepare data for non-local workforce
+        non_local_values = [
+            int(df['nonlocalfemaleskilled'].replace('---', 0).fillna(0).astype(int).sum()),
+            int(df['nonlocalfemaleunskilled'].replace('---', 0).fillna(0).astype(int).sum()),
+            int(df['nonlocalmaleskilled'].replace('---', 0).fillna(0).astype(int).sum()),
+            int(df['nonlocalmaleunskilled'].replace('---', 0).fillna(0).astype(int).sum())
+        ]
+
+        # Structure data for grouped bar chart
+        data_to_visualize = [
+            {'name': 'Local Workforce', 'data': [int(x) for x in local_values]},
+            {'name': 'Non-Local Workforce', 'data': [int(x) for x in non_local_values]}
+        ]
+
+        # Generate grouped bar chart
+        chartpeeur_grouped = self.generate_grouped_bar_chart(
+            x_labels=categories,
+            dataset=data_to_visualize,
+            x_title="Category",
+            y_title="Total Count",
+            chart_title="Comparison of Local vs Non-Local Skilled and Unskilled Workforce",
+            chart_subtitle="Grouped by category",
+            grouped="YES"
+        )
+        # print(chartpeeur_grouped)
+
+        
         # Chart 18: Distribution of Raw Material Source
         categories = ['Self-sourced (e.g., in Agriculture )', 'Locally(within the same district)', 'Regionally(within J&K)', 'Nationally(outside J&K)', 'Internationally (imported)', 'Others']
         rawmaterialsource_category = df['rawmaterialsource'].dropna().apply(
@@ -969,7 +1049,7 @@ class Chart:
         )
 
         data = {
-            'peur': [chartpeur1, chartpeur2, chartpeur3, chartpeur4, chartpeur5, chartpeur6, chartpeur7, chartpeur8, chartpeur9, chartpeur10, chartpeur11, chartpeur12, chartpeur13, chartpeur14, chartpeur15, chartpeur16, chartpeur17, chartpeur18, chartpeur19, chartpeur20, chartpeur21, chartpeur22, chartpeur23, chartpeur24, chartpeur25, chartpeur26, chartpeur27, chartpeur28, chartpeur29, chartpeur30],
+            'peur': [chartpeur1, chartpeur2, chartpeur3, chartpeur4, chartpeur5, chartpeur6, chartpeur7, chartpeur8, chartpeur9, chartpeur10,chartpeeur_grouped,chartpeur13, chartpeur14, chartpeur15, chartpeur16, chartpeur17, chartpeur18, chartpeur19, chartpeur20, chartpeur21, chartpeur22, chartpeur23, chartpeur24, chartpeur25, chartpeur26, chartpeur27, chartpeur28, chartpeur29, chartpeur30],
             'filtered_numbers':filtered_numbers
         }
         return data
