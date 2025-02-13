@@ -24,9 +24,5 @@ networks:
     driver: bridge
   web_network:
     driver: bridge
-logging:
-  driver: "json-file"
-  options:
-    max-size: "10m"
-    max-file: "3"
+
  
