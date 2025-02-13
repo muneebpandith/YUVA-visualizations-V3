@@ -410,7 +410,7 @@ async function loadChartSetIlp(url, type) {
 
         if(chart.type=='bar')
             {
-                generatePieChart(canvas, chart);   //defined in loadchartsjs.js
+                generateColumnChart(canvas, chart);   //defined in loadchartsjs.js
             }
         else if(chart.type=='column')
             {

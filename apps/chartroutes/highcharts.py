@@ -9,9 +9,10 @@ class Chart:
 
 
     def generate_bar_chart(self, dataset, x_title= "", y_title = "", y_unit="Values", chart_title="", chart_subtitle="", horizontal='NO'):
+        chart_type = 'bar' if horizontal.upper() == 'YES' else 'column'
         #dataset can have a array of of x's y's i.e., [[[2,3,4],[4,5,6]], [[0,1,2],[4,5,6]]], here there are two sets of x's and y's
         chart_config = {
-            'type': 'column',
+            'type': chart_type,
             'chart_title': chart_title,
             'horizontal': horizontal,
             'chart_subtitle':chart_subtitle,
@@ -237,7 +238,7 @@ class Chart:
         # Sector of Family Enterprise
         response_count = df[df['responseoffamilyenterprise'].notnull() & (df['responseoffamilyenterprise'] != '---')]['responseoffamilyenterprise'].value_counts()
         data_to_visualize = [[x, y] for (x, y) in zip(response_count.index.tolist(), response_count.values.tolist())]
-        chartH8 = self.generate_bar_chart(data_to_visualize, x_title="Sector", y_title="Counts", chart_title="Sector of Family Enterprise (Owning Enterprise = Yes)", chart_subtitle="")
+        chartH8 = self.generate_bar_chart(data_to_visualize, x_title="Sector", y_title="Counts", chart_title="Sector of Family Enterprise (Owning Enterprise = Yes)", chart_subtitle="",horizontal='YES')
 
         # Location of the Enterprise
         response_count = df['locationoftheenterprise'].replace('---', None).dropna().value_counts()
@@ -263,7 +264,7 @@ class Chart:
         #for the sake of numbers
         
         data = {
-        'household': [chartH1,chartH2,chartH3,chartH4,chartH5, chartH6,chartH7, chartH8,chartH9, chartH10,chartH11,chartH12],           
+        'household': [chartH1,chartH2,chartH3, chartH10,chartH12,chartH11,chartH4,chartH5, chartH6,chartH7, chartH8,chartH9],           
         'filtered_numbers':filtered_numbers}
 
         return data
@@ -394,7 +395,7 @@ class Chart:
         response_count = df['employmentstatus'].dropna().value_counts()
         xlabels, ydata = response_count.index.tolist(), response_count.values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartH18 = self.generate_bar_chart(data_to_visualize, x_title="Employment Status", y_title="Counts", chart_title="Distribution of Employment Status", chart_subtitle="", horizontal=True)
+        chartH18 = self.generate_bar_chart(data_to_visualize, x_title="Employment Status", y_title="Counts", chart_title="Distribution of Employment Status", chart_subtitle="",horizontal='YES')
 
                 # Change in Present Work (Pie Chart)
         # Define the employment statuses of interest
@@ -488,7 +489,7 @@ class Chart:
         data = df['sectorofenterprise'].dropna().value_counts()
         xlabels, ydata = data.index.tolist(), data.values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartpeur1 = self.generate_bar_chart(data_to_visualize, x_title="Sector", y_title="Count", chart_title="Distribution of Sectors Among Unregistered Enterprises", chart_subtitle="")
+        chartpeur1 = self.generate_bar_chart(data_to_visualize, x_title="Sector", y_title="Count", chart_title="Distribution of Sectors Among Unregistered Enterprises", chart_subtitle="",horizontal="YES")
         
         # Chart 2: Distribution of Types of Ownership (Unregistered Activities)
         specific_categories = [
@@ -916,7 +917,7 @@ class Chart:
         sorted_data = data_series.value_counts(ascending=False)
         xlabels, ydata = sorted_data.index.tolist(), sorted_data.values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartpeur22 = self.generate_bar_chart(data_to_visualize, x_title="Scheme", y_title="Count", chart_title="Distribution of Used Government Schemes", chart_subtitle="")
+        chartpeur22 = self.generate_bar_chart(data_to_visualize, x_title="Scheme", y_title="Count", chart_title="Distribution of Used Government Schemes", chart_subtitle="",horizontal='YES')
 
         # Prepare data for the bar chart
         filtered_data = df['loanrepaymentstatus'].dropna()  # Filter non-null values
@@ -1006,7 +1007,8 @@ class Chart:
                 x_title="Activity",
                 y_title="Count",
                 chart_title="Distribution of Activities Required for Training/Skill Upgradation",
-                chart_subtitle=""
+                chart_subtitle="",
+                horizontal='YES'
             )
         
         
@@ -1105,7 +1107,7 @@ class Chart:
         data = df['sectortechnicalskill'].value_counts()
         xlabels, ydata = data.index.tolist(), data.values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartPEE3 = self.generate_bar_chart(data_to_visualize, x_title="Sectors", y_title="Count", chart_title="PEE - Technical Skills Possessed Across Different Sectors", chart_subtitle="")
+        chartPEE3 = self.generate_bar_chart(data_to_visualize, x_title="Sectors", y_title="Count", chart_title="PEE - Technical Skills Possessed Across Different Sectors", chart_subtitle="",horizontal='YES')
 
         # Chart 4: PEE - Awareness of Government Initiatives for Youth Self-Employment Opportunities
         data = df['awareofgovtselfemploymentopportunity'].dropna().value_counts()
@@ -1117,7 +1119,7 @@ class Chart:
         data = df['sectorofinterest'].value_counts()
         xlabels, ydata = data.index.tolist(), data.values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartPEE5 = self.generate_bar_chart(data_to_visualize, x_title="Sectors", y_title="Count", chart_title="PEE - Preferred Sectors for Enterprise Creation Among Youth", chart_subtitle="")
+        chartPEE5 = self.generate_bar_chart(data_to_visualize, x_title="Sectors", y_title="Count", chart_title="PEE - Preferred Sectors for Enterprise Creation Among Youth", chart_subtitle="",horizontal='YES')
 
         # Chart 6: PEE - Preferred Scale of Business Investment (in Lakhs)
         business_scale = df['scaleofbusiness'].dropna().value_counts()
@@ -1193,7 +1195,7 @@ class Chart:
         # Extract labels and values
         xlabels, ydata = sorted_data.index.tolist(), sorted_data.values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartPEE8 = self.generate_bar_chart(data_to_visualize, x_title="Schemes", y_title="Count", chart_title="PEE - Government Self-Employment Schemes Recognized by Respondents (Aware of govt self employment schemes: Yes)", chart_subtitle="")
+        chartPEE8 = self.generate_bar_chart(data_to_visualize, x_title="Schemes", y_title="Count", chart_title="PEE - Government Self-Employment Schemes Recognized by Respondents (Aware of govt self employment schemes: Yes)", chart_subtitle="",horizontal='YES')
 
         # Chart 9: PEE - Approached Authorities for Financial Assistance Under Schemes
         data = df['approachedauthorityforassistance'].dropna().value_counts()
@@ -1254,7 +1256,7 @@ class Chart:
         data = df['trainingrequired'].value_counts()
         xlabels, ydata = data.index.tolist(), data.values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartPEE13 = self.generate_bar_chart(data_to_visualize, x_title="Training Requirements", y_title="Count", chart_title="PEE - Training & Skill Upgradation Requirements for Starting a Business (Interested in Yuva: Yes)", chart_subtitle="")
+        chartPEE13 = self.generate_bar_chart(data_to_visualize, x_title="Training Requirements", y_title="Count", chart_title="PEE - Training & Skill Upgradation Requirements for Starting a Business (Interested in Yuva: Yes)", chart_subtitle="",horizontal='YES')
 
         # Chart 14: PEU - Desired Financial Support from Government Schemes
         financial_support = df['financialsupportamount'].dropna().value_counts()
@@ -1368,7 +1370,7 @@ class Chart:
         data = df['sectortechnicalskill'].value_counts()
         xlabels, ydata = data.index.tolist(), data.values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartpeu3 = self.generate_bar_chart(data_to_visualize, x_title="Sectors", y_title="Count", chart_title="PEU - Sector of Possessed Technical Skill", chart_subtitle="")
+        chartpeu3 = self.generate_bar_chart(data_to_visualize, x_title="Sectors", y_title="Count", chart_title="PEU - Technical Skills Possessed Across Different Sectors", chart_subtitle="",horizontal='YES')
 
         # Chart 4: PEU - Awareness of Government Initiatives for Youth Self-Employment Opportunities
         data = df['awareofgovtselfemploymentopportunity'].dropna().value_counts()
@@ -1380,7 +1382,7 @@ class Chart:
         data = df['sectorofinterest'].value_counts()
         xlabels, ydata = data.index.tolist(), data.values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartpeu5 = self.generate_bar_chart(data_to_visualize, x_title="Sectors", y_title="Count", chart_title="PEU - Preferred Sectors for Enterprise Creation Among Youth", chart_subtitle="")
+        chartpeu5 = self.generate_bar_chart(data_to_visualize, x_title="Sectors", y_title="Count", chart_title="PEU - Preferred Sectors for Enterprise Creation Among Youth", chart_subtitle="",horizontal='YES')
 
         # Chart 6: PEU - Preferred Scale of Business Investment (in Lakhs)
         business_scale = df['scaleofbusiness'].dropna().value_counts()
@@ -1456,7 +1458,7 @@ class Chart:
         # Extract labels and values
         xlabels, ydata = sorted_data.index.tolist(), sorted_data.values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartpeu8 = self.generate_bar_chart(data_to_visualize, x_title="Schemes", y_title="Count", chart_title="PEU - Government Self-Employment Schemes Recognized by Respondents (Aware of govt self employment schemes: Yes)", chart_subtitle="")
+        chartpeu8 = self.generate_bar_chart(data_to_visualize, x_title="Schemes", y_title="Count", chart_title="PEU - Government Self-Employment Schemes Recognized by Respondents (Aware of govt self employment schemes: Yes)", chart_subtitle="",horizontal='YES')
 
         # Chart 9: PEU - Approached Authorities for Financial Assistance Under Schemes
         data = df['approachedauthorityforassistance'].dropna().value_counts()
@@ -1517,7 +1519,7 @@ class Chart:
         data = df['trainingrequired'].value_counts()
         xlabels, ydata = data.index.tolist(), data.values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
-        chartpeu13 = self.generate_bar_chart(data_to_visualize, x_title="Training Requirements", y_title="Count", chart_title="PEU - Training & Skill Upgradation Requirements for Starting a Business (Interested in Yuva: Yes)", chart_subtitle="")
+        chartpeu13 = self.generate_bar_chart(data_to_visualize, x_title="Training Requirements", y_title="Count", chart_title="PEU - Training & Skill Upgradation Requirements for Starting a Business (Interested in Yuva: Yes)", chart_subtitle="",horizontal='YES')
 
         # Chart 14: PEU - Desired Financial Support from Government Schemes
         financial_support = df['financialsupportamount'].dropna().value_counts()

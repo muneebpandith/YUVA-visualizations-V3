@@ -46,7 +46,7 @@ function generatePieChart(canvas, chart) {
 
 
 xx = [];
-function generateColumnChart(canvas, chart) {
+/*function generateColumnChart(canvas, chart) {
     // Ensure chart.series[0].data is an array
     if (!Array.isArray(chart.series[0].data)) {
         console.error("chart.series[0].data is not an array:", chart.series[0].data);
@@ -145,6 +145,111 @@ function generateColumnChart(canvas, chart) {
             data: chart.series[0].data
         }]
     });
+}*/
+
+function generateColumnChart(canvas, chart) {
+    // Ensure chart.series[0].data is an array
+    if (!Array.isArray(chart.series[0].data)) {
+        console.error("chart.series[0].data is not an array:", chart.series[0].data);
+        return;
+    }
+
+    // Calculate the total sum of all data points
+    const total = chart.series[0].data.reduce((sum, point) => {
+        if (Array.isArray(point) && point.length === 2 && typeof point[1] === 'number') {
+            return sum + point[1]; // Use the numeric value from each array
+        } else {
+            console.error("Invalid data point:", point);
+            return sum;
+        }
+    }, 0);
+
+    // Determine the chart type based on the 'horizontal' property
+    const chartType = chart.horizontal === 'YES' ? 'bar' : 'column';
+
+    // Generate the chart
+    Highcharts.chart(canvas, {
+        chart: {
+            type: chartType, // Dynamically set the chart type
+            height: 600
+        },
+        title: {
+            text: chart.chart_title
+        },
+        subtitle: {
+            text: chart.chart_subtitle
+        },
+        tooltip: {
+            pointFormat: '{point.name}: <b>{point.y:.1f}%</b>' // Show as percentage
+        },
+        plotOptions: {
+            [chartType]: { // Use dynamic property name for plotOptions
+                dataLabels: {
+                    enabled: true,
+                    verticalAlign: chartType === 'column' ? 'bottom' : 'middle', // Adjust label position
+                    style: {
+                        fontSize: '12px',
+                        fontWeight: 'bold',
+                        color: '#333'
+                    },
+                    formatter: function () {
+                        // Ensure this.y is a valid number
+                        if (typeof this.y !== 'number' || isNaN(this.y)) {
+                            console.error("Invalid value in dataLabels formatter:", this.y);
+                            return 'N/A';
+                        }
+
+                        // Calculate percentage
+                        const percentage = ((this.y / total) * 100).toFixed(0);
+                        // Format value in 'k' and add percentage
+                        return `${formatValue(this.y)}(${percentage}%)`;
+                    },
+                }
+            }
+        },
+        xAxis: {
+            type: chart.x_axis.type,
+            title: {
+                text: chart.x_axis.title,
+                style: {
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    color: '#000'
+                }
+            },
+            labels: {
+                autoRotation: [-45, -90],
+                style: {
+                    fontSize: '13px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: chart.y_axis.title,
+                style: {
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    color: '#333'
+                }
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        tooltip: {
+            pointFormat: '<b>Value: {point.y:.1f}</b>'
+        },
+        showInLegend: true,
+        series: [{
+            name: chart.series[0].name,
+            colorByPoint: true,
+            groupPadding: 0,
+            data: chart.series[0].data
+        }]
+    });
 }
 
 function generateGroupedBarChart(canvas, chart) {
@@ -172,7 +277,7 @@ function generateGroupedBarChart(canvas, chart) {
                     enabled: true,
                     verticalAlign: 'bottom',  // Position the label at the top of the column
                     style: {
-                        fontSize: '12px',
+                        fontSize: '11px',
                         fontWeight: 'bold',
                         color: '#333'
                     },
