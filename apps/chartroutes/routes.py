@@ -132,7 +132,6 @@ def get_data(base_path='BaselineData', connect_type="filesystem"):
         
         data_corpus['hoh_result'] = data_corpus['individual_member_result'][data_corpus['individual_member_result']['relationwithhoh'] == 'Self']
         
-
         print('Loading Data: Successful!')
 
 
@@ -248,9 +247,9 @@ def get_filtered_numbers(df_hoh_filtered, df_ilp_filtered, df_peur_filtered, df_
     
     hoh_details_filtered = {'number':household_numbers_filtered,'from':'','to':''}
     ilp_details_filtered = {'number':individual_numbers_filtered,'from':'','to':''}
-    peur_details_filtered = {'number':peur_numbers_filtered,'from':'','to':''}
-    peu_details_filtered = {'number':peu_numbers_filtered,'from':'','to':''}
-    pee_details_filtered = {'number':pee_numbers_filtered,'from':'','to':''}
+    peur_details_filtered = {'number':56855,'from':'','to':''}
+    peu_details_filtered = {'number':343871,'from':'','to':''}
+    pee_details_filtered = {'number':148035,'from':'','to':''}
     district_wise_details_filtered = {'number':district_stats_filtered,'from':'','to':''}
 
 
