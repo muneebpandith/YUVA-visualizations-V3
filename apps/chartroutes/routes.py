@@ -2606,7 +2606,7 @@ def get_peu_charts_filtered():
         elif min_age == 60:
             df = df[df['years'] >= min_age]
         #df = df[df['age']==age]
-        #print('After filtering panchayatward type ', panchayatward,',Genders remain', list(df[parameter].unique()))
+        #print('After filtering panchayatward  ', panchayatward,',Genders remain', list(df[parameter].unique()))
      
                     
     if not gender == "All":

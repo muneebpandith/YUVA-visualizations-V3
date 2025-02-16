@@ -13,6 +13,15 @@ def index():
                            segment='index')
     #return render_template('home/index.html',  segment='index', user_id=current_user.id)
 
+
+# @blueprint.route('/login')
+# # **@login_required
+# def login_default_template_overwrite():
+#     return render_template('home/index.html', segment='index')
+
+
+
+
 @blueprint.route('/<template>')
 # **@login_required
 def route_template(template):
