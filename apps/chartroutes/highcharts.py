@@ -1,6 +1,7 @@
 import random
 import pandas as pd
-import ast 
+import re
+
 class Chart:
     def __init__(self):
         #print("Loaded charts")
@@ -490,7 +491,36 @@ class Chart:
         xlabels, ydata = data.index.tolist(), data.values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
         chartpeur1 = self.generate_bar_chart(data_to_visualize, x_title="Sector", y_title="Count", chart_title="Distribution of Sectors Among Unregistered Enterprises", chart_subtitle="",horizontal="YES")
-        
+            
+        # Parse and extract all values correctly, ignoring commas inside quotes
+        parsed_data = df['typeofactivity'].dropna().apply(lambda x: re.findall(r'"([^"]+)"', x))
+
+        # Flatten the list while ensuring only valid values are included
+        data_series = pd.Series(
+            category.strip() for row in parsed_data for category in row if category.strip()
+        )
+
+        # Count occurrences and get the top 10 activities
+        sorted_data = data_series.value_counts().nlargest(10)
+
+        # Extract labels and values
+        xlabels, ydata = sorted_data.index.tolist(), sorted_data.values.tolist()
+
+        # Prepare data for visualization
+        data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
+
+        # Generate the bar chart
+        chart_activities = self.generate_bar_chart(
+            data_to_visualize,
+            x_title="Activity",
+            y_title="Count",
+            chart_title="Top 10 Business Activities Among Unregistered Enterprises",
+            chart_subtitle="",
+            horizontal="YES"  # Optional: Horizontal bar chart
+        )
+
+
+       
         # Chart 2: Distribution of Types of Ownership (Unregistered Activities)
         specific_categories = [
             "Single Proprietorship", "Group of Family members(Partnership within the same household)",
@@ -827,7 +857,7 @@ class Chart:
         filtered_data = df['interestedinformalsetup'].dropna().loc[lambda x: x != '---']
         xlabels, ydata = filtered_data.value_counts().index.tolist(), filtered_data.value_counts().values.tolist()
         data_to_visualize = [{'name': x, 'data': y} for (x, y) in zip(xlabels, ydata)]
-        chartpeur18 = self.generate_pie_chart(data_to_visualize, chart_title="Proportion of Businesses Interested in Informal Setup", chart_subtitle="")
+        chartpeur18 = self.generate_pie_chart(data_to_visualize, chart_title="Proportion of Businesses Interested in Formal Setup", chart_subtitle="")
 
         # Chart 11: Reasons for Not Shifting to Formal Sector
         data = df['reasonsfornotshifting'].dropna()
@@ -1051,7 +1081,7 @@ class Chart:
         )
 
         data = {
-            'peur': [chartpeur1, chartpeur2, chartpeur3, chartpeur4, chartpeur5, chartpeur6, chartpeur7, chartpeur8, chartpeur9, chartpeur10,chartpeeur_grouped,chartpeur13, chartpeur14, chartpeur15, chartpeur16, chartpeur17, chartpeur18, chartpeur19, chartpeur20, chartpeur21, chartpeur22, chartpeur23, chartpeur24, chartpeur25, chartpeur26, chartpeur27, chartpeur28, chartpeur29, chartpeur30],
+            'peur': [chartpeur1, chart_activities, chartpeur2, chartpeur3, chartpeur4, chartpeur5, chartpeur6, chartpeur7, chartpeur8, chartpeur9, chartpeur10,chartpeeur_grouped,chartpeur13, chartpeur14, chartpeur15, chartpeur16, chartpeur17, chartpeur18, chartpeur19, chartpeur20, chartpeur21, chartpeur22, chartpeur23, chartpeur24, chartpeur25, chartpeur26, chartpeur27, chartpeur28, chartpeur29, chartpeur30],
             'filtered_numbers':filtered_numbers
         }
         return data
@@ -1120,6 +1150,33 @@ class Chart:
         xlabels, ydata = data.index.tolist(), data.values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
         chartPEE5 = self.generate_bar_chart(data_to_visualize, x_title="Sectors", y_title="Count", chart_title="PEE - Preferred Sectors for Enterprise Creation Among Youth", chart_subtitle="",horizontal='YES')
+
+        # Parse and extract all values correctly, ignoring commas inside quotes
+        parsed_data = df['typeofactivity'].dropna().apply(lambda x: re.findall(r'"([^"]+)"', x))
+
+        # Flatten the list while ensuring only valid values are included
+        data_series = pd.Series(
+            category.strip() for row in parsed_data for category in row if category.strip()
+        )
+
+        # Count occurrences and get the top 10 activities
+        sorted_data = data_series.value_counts().nlargest(10)
+
+        # Extract labels and values
+        xlabels, ydata = sorted_data.index.tolist(), sorted_data.values.tolist()
+
+        # Prepare data for visualization
+        data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
+
+        # Generate the bar chart
+        chart_pee_activities = self.generate_bar_chart(
+            data_to_visualize,
+            x_title="Activity",
+            y_title="Count",
+            chart_title="PEE-Top 10 Preferred Business Activities",
+            chart_subtitle="",
+            horizontal="YES"  # Optional: Horizontal bar chart
+        )
 
         # Chart 6: PEE - Preferred Scale of Business Investment (in Lakhs)
         business_scale = df['scaleofbusiness'].dropna().value_counts()
@@ -1308,7 +1365,7 @@ class Chart:
         chartPEE16 = self.generate_pie_chart(data_to_visualize, chart_title="PEE - Presence of Successful Entrepreneurs as Role Models in the Locality", chart_subtitle="")
         
         data = {
-            'pee': [chartPEE1, chartPEE2, chartPEE3, chartPEE4, chartPEE5, chartPEE6, chartPEE7,chartPEE8, chartPEE9, chartPEE10, chartPEE11, chartPEE12, chartPEE13, chartPEE14, chartPEE15,chartPEE16],
+            'pee': [chartPEE1, chartPEE2, chartPEE3, chartPEE4, chartPEE5,chart_pee_activities, chartPEE6, chartPEE7,chartPEE8, chartPEE9, chartPEE10, chartPEE11, chartPEE12, chartPEE13, chartPEE14, chartPEE15,chartPEE16],
             'filtered_numbers':filtered_numbers
         }
         return data
@@ -1383,6 +1440,33 @@ class Chart:
         xlabels, ydata = data.index.tolist(), data.values.tolist()
         data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
         chartpeu5 = self.generate_bar_chart(data_to_visualize, x_title="Sectors", y_title="Count", chart_title="PEU - Preferred Sectors for Enterprise Creation Among Youth", chart_subtitle="",horizontal='YES')
+
+                # Parse and extract all values correctly, ignoring commas inside quotes
+        parsed_data = df['typeofactivity'].dropna().apply(lambda x: re.findall(r'"([^"]+)"', x))
+
+        # Flatten the list while ensuring only valid values are included
+        data_series = pd.Series(
+            category.strip() for row in parsed_data for category in row if category.strip()
+        )
+
+        # Count occurrences and get the top 10 activities
+        sorted_data = data_series.value_counts().nlargest(10)
+
+        # Extract labels and values
+        xlabels, ydata = sorted_data.index.tolist(), sorted_data.values.tolist()
+
+        # Prepare data for visualization
+        data_to_visualize = [[x, y] for (x, y) in zip(xlabels, ydata)]
+
+        # Generate the bar chart
+        chart_peu_activities = self.generate_bar_chart(
+            data_to_visualize,
+            x_title="Activity",
+            y_title="Count",
+            chart_title="PEU-Top 10 Preferred Business Activities",
+            chart_subtitle="",
+            horizontal="YES"  # Optional: Horizontal bar chart
+        )
 
         # Chart 6: PEU - Preferred Scale of Business Investment (in Lakhs)
         business_scale = df['scaleofbusiness'].dropna().value_counts()
@@ -1572,7 +1656,7 @@ class Chart:
         
         data = {
             'peu': [
-                chartpeu1, chartpeu2, chartpeu3, chartpeu4, chartpeu5, chartpeu6, chartpeu7, chartpeu8, chartpeu9, chartpeu10, chartpeu11, chartpeu12, chartpeu13, chartpeu14, chartpeu15, chartpeu16],
+                chartpeu1, chartpeu2, chartpeu3, chartpeu4, chartpeu5,chart_peu_activities, chartpeu6, chartpeu7, chartpeu8, chartpeu9, chartpeu10, chartpeu11, chartpeu12, chartpeu13, chartpeu14, chartpeu15, chartpeu16],
             'filtered_numbers':filtered_numbers
             
         }
