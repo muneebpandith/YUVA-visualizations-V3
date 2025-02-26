@@ -1,0 +1,215 @@
+{% extends "layouts/base-fullscreen.html" %}
+
+{% block content %}
+<body> 
+
+    {%if not current_user.id %}
+    <!-- <div id="dialogbox">
+        <div class="row">
+            <div class="col-12" style="display: flex; justify-content: center;">
+                    <div class="row">
+                        <p style="font: 24px / 24px Roboto;">
+                            Interested in accessing the data product? Please sign in or register
+                        </p>
+                    </div>
+                    <div class="row">
+                        <a href="{{ url_for('authentication_blueprint.login') }}"><button class="btn btn-primary" style="margin:10px;">Signin</button></a>
+                        <a href="{{ url_for('authentication_blueprint.register') }}"> <button class="btn btn-warning" style="margin:10px;">Register </button></a>
+                        <a onclick="document.getElementById('dialogbox').style.display='none';"> <button class="btn btn-warning" style="margin:10px;">Cancel </button></a>
+                    </div>
+            </div>
+        </div>
+                
+    </div> -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Interested in accessing the datastack?</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <div class="row">
+                  <div class="col-3 d-flex align-items-center justify-content-center">
+                    <i class="fa-solid fa-circle-exclamation" style="font-size:40px;"></i>
+                  </div>
+                  <div class="col">
+                    <p>This datastack is available for registered users only. Kindly Login or Register. Then come back to this page and make a request for this datastack.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+                <a href="{{ url_for('authentication_blueprint.login') }}"><button class="btn btn-primary">Login</button></a>
+                <a href="{{ url_for('authentication_blueprint.register') }}"> <button class="btn btn-warning">Register </button></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Hero Section -->
+    <div class="hero-section" style="padding-left:20px;">
+
+        <div class="row text-start">
+            <div class="col-12">
+                <p style="font-family: Roboto;">
+                    <a href="/index" style="color:white;" >Home </a> 
+                    <i class="fa-solid fa-play" style="margin:5px;"></i>
+                    <a href="/data" style="color:white;" >Data & Services</a>
+                    <i class="fa-solid fa-play" style="margin:5px;"></i>
+                    <b>{{data.name}}</b>
+                </p>
+            </div>
+
+            <div class="col-12">
+                <h2 style="font-family: Roboto-Bold; color:#fff;">{{data.name}}</h2>
+            </div>
+            <div class="col-12 mt-4">
+                <div class="row"><div class="col-sm-12 col-md-6 details_picture">
+                    <img src="{{data.thumbnail}}" alt="data-catalogue" class="details_picture-img"></div>
+                    <div class="col-sm-12 col-md-6 pe-0 ps-4 details_description">
+                        <h4 style="color:#fff; font-weight: normal;">{{data.detailed_info}}</h4>
+                        {%if not current_user.id %}
+                            <button type="submit" class="btn btn-primary mt-2" style="font-family: Roboto; font-size:20px;" data-bs-toggle="modal" data-bs-target="#exampleModal">Login/Register and request this datastack</button>
+                        {% else %}
+                            <a href="/request-datastack/{{data.id}}"><button type="submit" class="btn btn-warning mt-2" style="font-family: Roboto; font-size:20px;">Request this datastack</button></a>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+    
+    <!-- Search and Filter -->
+
+    
+    <!-- Data List (Placeholder) -->
+    <div class="row" style="margin-top:-70px;">
+        <div class="col-12 d-flex flex-wrap" style="margin:10px;"> 
+            <!-- Left Column -->
+            <div class="col-md-6">
+                <div class="shadow filtercardsborder details__content-tabs">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active navitemsmain" id="tab-1-tab" data-bs-toggle="tab" data-bs-target="#tab-1" type="button" role="tab" aria-controls="tab-1" aria-selected="true">
+                                Documentation
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link navitemsmain" id="tab-2-tab" data-bs-toggle="tab" data-bs-target="#tab-2" type="button" role="tab" aria-controls="tab-2" aria-selected="false">
+                                License
+                            </button>
+                        </li>
+                    </ul>
+    
+                    <!-- Tab Content -->
+                    <div class="tab-content p-3" id="myTabContent">
+                        <!-- Tab 1 Content -->
+                        <div class="tab-pane fade show active" id="tab-1" role="tabpanel" aria-labelledby="tab-1-tab">
+                            <div class="row">
+                                <div class="col-12">
+                                    <b style="font-family: Roboto-bold;">Meta data:</b>
+                                </div>
+                                <div class="col-12">
+                                    {% if data.metadata_url %}<a href="{{data.metadata_url}}">Click here</a>{% else %}No Metadata available{% endif %}
+                                </div>
+                                <hr>
+
+                                <div class="col-12">
+                                    <b style="font-family: Roboto-bold;">Sample data: </b>
+                                </div>
+                                <div class="col-12">
+                                    {% if data.sample_data_url %}<a href="{{data.sample_data_url}}">Click here</a>{% else %}No sample data available{% endif %}
+                                </div>
+
+
+                            </div>
+                        </div>
+    
+                        <!-- Tab 2 Content -->
+                        <div class="tab-pane fade" id="tab-2" role="tabpanel" aria-labelledby="tab-2-tab">
+                            <div class="row">
+                                <div class="col-12">
+                                    <b style="font-family: Roboto-bold;">License Agreement : </b>
+                                </div>
+                                <div class="col-12">
+                                   {% if data.license_url %}<a href="{{data.license_url}}">Click here</a>{% else %}No License available{% endif %}
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Right Column -->
+            <div class="col-md-6">
+                <div class="col-12 details__content-features">
+                    <!-- Dynamic Keywords -->
+                    <div class="d-flex flex-wrap card-searchtags">
+                        {% for keyword in data.keywords %}
+                            <span class="ovalCard cursor-pointer" title="{{ keyword }}">{{ keyword }}</span>
+                        {% endfor %}
+                    </div>
+            
+                    <!-- Dynamic Data Fields -->
+                    <div class="row details__content-features-data">
+                        <div class="col-md-8">
+                            <span style="font-size: 16px;">Version</span>
+                            <p>{{ data.version }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <span>Date published</span>
+                            <p>{{ data.date_published }}</p>
+                        </div>
+                        <!-- <div class="col-md-4">
+                            <span>API available</span>
+                            <p>{% if data.api_url %}Yes{% else %}No{% endif %}</p>
+                        </div> -->
+                        <hr>
+                        <div class="col-md-12">
+                            <span>Data Fields Present</span>
+                            <p>{{ data.data_fields | join(", ") }}</p>
+                        </div>
+                        
+                        <hr>
+                        <div class="col-md-8">
+                            <span>Data Provider</span>
+                            <p>{{ data.provider }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <span>Last updated on</span>
+                            <p>{{ data.last_updated | default("N/A") }}</p>
+                        </div>
+                        <hr>
+                        <div class="col-md-8">
+                            <span>Subscription Model</span>
+                            <p>{{ data.subscription_model }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <span>Approval Required</span>
+                            <p style="text-transform: capitalize;">{{ data.approval_based_model }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+               
+        </div>
+    </div>
+    
+        
+    <!-- Opportunities Section -->
+    <!-- <div class="container mt-5" id="opportunities">
+        <h2 class="text-center">Entrepreneurship Opportunities</h2>
+        <p class="text-center">Find government-supported schemes and private opportunities.</p>
+    </div> -->
+    
+    <!-- Footer -->
+{% endblock content %}  
+    
+   

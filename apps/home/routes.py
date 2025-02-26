@@ -1,28 +1,21 @@
 
-
+from flask import render_template, request, jsonify
 from apps.home import blueprint
 from flask import render_template, request
 from flask_login import login_required, current_user
 from jinja2 import TemplateNotFound
 
 
-@blueprint.route('/index')
+
+@blueprint.route('/index/')
 # **@login_required
 def index():
-    return render_template('home/index.html', 
-                           segment='index')
+    return render_template('home/index.html', segment='index')
     #return render_template('home/index.html',  segment='index', user_id=current_user.id)
 
 
-# @blueprint.route('/login')
-# # **@login_required
-# def login_default_template_overwrite():
-#     return render_template('home/index.html', segment='index')
 
-
-
-
-@blueprint.route('/<template>')
+@blueprint.route('/<template>/')
 # **@login_required
 def route_template(template):
     #print("hi")

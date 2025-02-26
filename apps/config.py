@@ -1,9 +1,6 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
 
 import os, random, string
+from datetime import datetime
 
 class Config(object):
 
@@ -53,7 +50,14 @@ class Config(object):
         SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db.sqlite3') 
 
     # Assets Management
-    ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets')    
+    ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/uploads')    
+    CURRENT_YEAR =  datetime.utcnow().year
+
+
+    # Uploading directory
+    UPLOADS_ROOT = os.getenv('UPLOADS_ROOT', '/uploads')  
+    MAX_UPLOAD_SIZE = os.getenv('MAX_UPLOAD_SIZE', 512000)  
+    
     #HIGHCHARTS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets')
     
     SOCIAL_AUTH_GITHUB  = False
@@ -76,7 +80,6 @@ class ProductionConfig(Config):
 
 class DebugConfig(Config):
     DEBUG = True
-
 
 # Load all possible configurations
 config_dict = {
